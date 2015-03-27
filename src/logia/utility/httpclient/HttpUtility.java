@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -23,7 +24,7 @@ public abstract class HttpUtility {
 	private final String SET_COOKIE_KEY = "Set-Cookie";
 	
 	/** The session cookie. */
-	protected final String SESSION_COOKIE = "JSESSIONID";
+	protected String SESSION_COOKIE = "JSESSIONID";
 	
 	/** The cookie key. */
 	public static final String COOKIE_KEY = "Cookie";
@@ -80,19 +81,7 @@ public abstract class HttpUtility {
 	 */
 	protected void setHeaders() {
 		for (String key : headers.keySet()) {
-			if (key.equals(COOKIE_KEY) && !headers.get(COOKIE_KEY).equals("")) {
-				String sessionId = headers.get(COOKIE_KEY);
-				if (sessionId.length() > 0) {
-					StringBuilder builder = new StringBuilder();
-					builder.append(SESSION_COOKIE);
-					builder.append("=");
-					builder.append(sessionId);
-					httpConn.setRequestProperty(COOKIE_KEY, builder.toString());
-				}
-			}
-			else {
-				httpConn.setRequestProperty(key, headers.get(key));
-			}
+			httpConn.setRequestProperty(key, headers.get(key));
 		}
 	}
 
@@ -164,19 +153,34 @@ public abstract class HttpUtility {
 	}
 
 	/**
-	 * Read get cookie response.
+	 * Gets the cookies.
 	 *
-	 * @return the string
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @return the cookies
 	 */
-	public String readGetCookieResponse() throws IOException {
-		String cookie = httpConn.getHeaderField(SET_COOKIE_KEY);
-		if (cookie != null && cookie.length() > 0) {
-			String[] splitCookie = cookie.split(";");
-			String[] splitSessionId = splitCookie[0].split("=");
-			cookie = splitSessionId[1];
+	public List<String> getCookies() {
+		Map<String, List<String>> headerMaps = httpConn.getHeaderFields();		
+		List<String> cookies = headerMaps.get(SET_COOKIE_KEY);	
+		return cookies;
+	}
+	
+	/**
+	 * Gets the session id.
+	 *
+	 * @return the session id
+	 */
+	public String getSessionId() {
+		String sessionId = null;
+		for (String cookie : getCookies()) {
+			if (cookie.toLowerCase().contains("sessionid")) {
+				String[] arr = cookie.split(";");
+				for (int i = 0; i < arr.length; i++) {
+					if (arr[i].toLowerCase().contains("sessionid")) {
+						sessionId = arr[i];
+					}
+				}
+			}
 		}
-		return cookie;
+		return sessionId;
 	}
 
 	/**
