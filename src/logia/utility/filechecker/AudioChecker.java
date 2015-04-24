@@ -9,78 +9,67 @@ import java.io.FileInputStream;
  * @author Paul Mai
  */
 public final class AudioChecker {
-	public static boolean isAudio(File file) throws Exception {
-		if (isAAC_MPEG2(file)) {
-			return true;
+
+	private enum AudioCode {
+		AAC_MPEG2("aac", new int[] { 0xff, 0xf9 }), AAC_MPEG4("aac", new int[] { 0xff, 0xf1 }), AMR("arm", new int[] { 0x23, 0x21, 0x41, 0x4d, 0x52 }), FLAC(
+				"flac", new int[] { 0x66, 0x4c, 0x61, 0x43, 0x00, 0x00, 0x00, 0x22 }), FLV("flv", new int[] { 0x46, 0x4c, 0x56 }), M4A("m4a",
+						new int[] { 0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x4d, 0x34, 0x41 }), MIDI("midi", new int[] { 0x4d, 0x54, 0x68, 0x64 }), MP3(
+								"mp3", new int[] { 0x49, 0x44, 0x33 }), WAV("wav", new int[] { 0x52, 0x49, 0x46, 0x46 }), WMA("wma", new int[] { 0x30, 0x26, 0xb2,
+										0x75, 0x8e, 0x66, 0xcf, 0x11 });
+
+		private String extension;
+		private int[]  header;
+
+		private AudioCode(String extension, int[] header) {
+			this.extension = extension;
+			this.header = header;
 		}
-		else if (isAAC_MPEG4(file)) {
-			return true;
+
+		public String getExtension() {
+			return this.extension;
 		}
-		else if (isAMR(file)) {
-			return true;
-		}
-		else if (isFLAC(file)) {
-			return true;
-		}
-		else if (isFLV(file)) {
-			return true;
-		}
-		else if (isM4A(file)) {
-			return true;
-		}
-		else if (isMIDI(file)) {
-			return true;
-		}
-		else if (isMP3(file)) {
-			return true;
-		}
-		else if (isWAV(file)) {
-			return true;
-		}
-		else if (isWMA(file)) {
-			return true;
-		}
-		else {
-			return false;
+
+		public int[] getHeader() {
+			return this.header;
 		}
 	}
-	
+
 	public static String getAudioType(File file) throws Exception {
-		if (isAAC_MPEG2(file)) {
+		if (AudioChecker.isAAC_MPEG2(file)) {
 			return AudioCode.AAC_MPEG2.getExtension();
 		}
-		else if (isAAC_MPEG4(file)) {
+		else if (AudioChecker.isAAC_MPEG4(file)) {
 			return AudioCode.AAC_MPEG4.getExtension();
 		}
-		else if (isAMR(file)) {
+		else if (AudioChecker.isAMR(file)) {
 			return AudioCode.AMR.getExtension();
 		}
-		else if (isFLAC(file)) {
+		else if (AudioChecker.isFLAC(file)) {
 			return AudioCode.FLAC.getExtension();
 		}
-		else if (isFLV(file)) {
+		else if (AudioChecker.isFLV(file)) {
 			return AudioCode.FLV.getExtension();
 		}
-		else if (isM4A(file)) {
+		else if (AudioChecker.isM4A(file)) {
 			return AudioCode.M4A.getExtension();
 		}
-		else if (isMIDI(file)) {
+		else if (AudioChecker.isMIDI(file)) {
 			return AudioCode.MIDI.getExtension();
 		}
-		else if (isMP3(file)) {
+		else if (AudioChecker.isMP3(file)) {
 			return AudioCode.MP3.getExtension();
 		}
-		else if (isWAV(file)) {
+		else if (AudioChecker.isWAV(file)) {
 			return AudioCode.WAV.getExtension();
 		}
-		else if (isWMA(file)) {
+		else if (AudioChecker.isWMA(file)) {
 			return AudioCode.WMA.getExtension();
 		}
 		else {
 			return "N/A";
 		}
 	}
-	
+
 	public static boolean isAAC_MPEG2(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -102,7 +91,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isAAC_MPEG4(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -124,7 +113,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isAMR(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -146,7 +135,43 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
+	public static boolean isAudio(File file) throws Exception {
+		if (AudioChecker.isAAC_MPEG2(file)) {
+			return true;
+		}
+		else if (AudioChecker.isAAC_MPEG4(file)) {
+			return true;
+		}
+		else if (AudioChecker.isAMR(file)) {
+			return true;
+		}
+		else if (AudioChecker.isFLAC(file)) {
+			return true;
+		}
+		else if (AudioChecker.isFLV(file)) {
+			return true;
+		}
+		else if (AudioChecker.isM4A(file)) {
+			return true;
+		}
+		else if (AudioChecker.isMIDI(file)) {
+			return true;
+		}
+		else if (AudioChecker.isMP3(file)) {
+			return true;
+		}
+		else if (AudioChecker.isWAV(file)) {
+			return true;
+		}
+		else if (AudioChecker.isWMA(file)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public static boolean isFLAC(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -168,7 +193,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isFLV(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -190,7 +215,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isM4A(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -212,7 +237,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMIDI(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -234,7 +259,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMP3(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -256,7 +281,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isWAV(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -278,7 +303,7 @@ public final class AudioChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isWMA(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -299,31 +324,5 @@ public final class AudioChecker {
 			}
 		}
 		return checked;
-	}
-	
-	private enum AudioCode {
-		AAC_MPEG2("aac", new int[] { 0xff, 0xf9 }),
-		AAC_MPEG4("aac", new int[] { 0xff, 0xf1 }),
-		AMR("arm", new int[] { 0x23, 0x21, 0x41, 0x4d, 0x52 }),
-		FLAC("flac", new int[] { 0x66, 0x4c, 0x61, 0x43, 0x00, 0x00, 0x00, 0x22 }),
-		FLV("flv", new int[] { 0x46, 0x4c, 0x56 }),
-		M4A("m4a", new int[] { 0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x4d, 0x34, 0x41 }),
-		MIDI("midi", new int[] { 0x4d, 0x54, 0x68, 0x64 }),
-		MP3("mp3", new int[] { 0x49, 0x44, 0x33 }),
-		WAV("wav", new int[] { 0x52, 0x49, 0x46, 0x46 }),
-		WMA("wma", new int[] { 0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11 });
-		
-		private String extension;
-		private int[] header;
-		private AudioCode(String extension, int[] header) {
-			this.extension = extension;
-			this.header = header;
-		}
-		public String getExtension() {
-			return extension;
-		}
-		public int[] getHeader() {
-			return header;
-		}
 	}
 }

@@ -23,86 +23,6 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileUtil {
 
-	/**
-	 * Select filein directory.
-	 *
-	 * @param filename the filename
-	 * @param path the path
-	 * @return the file
-	 * @throws NullPointerException the null pointer exception
-	 * @throws SecurityException the security exception
-	 */
-	public static File selectFileinDirectory(String filename, String path) throws NullPointerException, SecurityException {
-		File folder = new File(path);
-		File[] listOfFiles = folder.listFiles();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				if (listOfFiles[i].getName().contains(filename)) {
-					return listOfFiles[i];
-				}
-			}
-		}		
-		return null;    	
-	}
-
-	/**
-	 * Gets the files in directory.
-	 *
-	 * @param directoryPath the directory path
-	 * @return the files in directory
-	 */
-	public static List<File> getFilesInDirectory(String directoryPath) {
-		List<File> list = new ArrayList<File>();
-		File folder = new File(directoryPath);
-		if (folder.isDirectory()) {
-			File[] listOfFiles = folder.listFiles();		
-			for (int i = 0; i < listOfFiles.length; i++) {
-				if (listOfFiles[i].isFile()) {
-					list.add(listOfFiles[i]);
-				}
-			}
-			sortFilesByDate(list);
-		}		
-		return list;
-	}
-
-	/**
-	 * Sort files by date.
-	 *
-	 * @param list the list
-	 */
-	public static void sortFilesByDate(List<File> list) {
-		Collections.sort(list, new Comparator<File>() {
-
-			@Override
-			public int compare(File o1, File o2) {
-				return (int) (o2.lastModified() - o1.lastModified());
-			}
-
-		});
-	}
-
-	/**
-	 * Read file.
-	 *
-	 * @param fileUrl the file url
-	 * @return the string
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public static String readFile(String fileUrl) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		InputStream is = new FileInputStream(fileUrl);
-		BufferedReader input = new BufferedReader(new InputStreamReader(is,
-				"UTF-8"));
-		String line;
-		while ((line = input.readLine()) != null) {
-			sb.append(line).append("\r\n");
-		}
-		is.close();
-		input.close();
-		return sb.toString();
-	}
-	
 	public static void copyDirectory(File sourceLocation, File targetLocation) {
 		try {
 			if (sourceLocation.exists()) {
@@ -111,8 +31,8 @@ public class FileUtil {
 						targetLocation.mkdir();
 					}
 					String[] children = sourceLocation.list();
-					for (int i = 0; i < children.length; i++) {
-						copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
+					for (String element : children) {
+						FileUtil.copyDirectory(new File(sourceLocation, element), new File(targetLocation, element));
 					}
 				}
 				else if (sourceLocation.isFile()) {
@@ -142,5 +62,83 @@ public class FileUtil {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Gets the files in directory.
+	 *
+	 * @param directoryPath the directory path
+	 * @return the files in directory
+	 */
+	public static List<File> getFilesInDirectory(String directoryPath) {
+		List<File> list = new ArrayList<File>();
+		File folder = new File(directoryPath);
+		if (folder.isDirectory()) {
+			File[] listOfFiles = folder.listFiles();
+			for (File listOfFile : listOfFiles) {
+				if (listOfFile.isFile()) {
+					list.add(listOfFile);
+				}
+			}
+			FileUtil.sortFilesByDate(list);
+		}
+		return list;
+	}
+
+	/**
+	 * Read file.
+	 *
+	 * @param fileUrl the file url
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static String readFile(String fileUrl) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		InputStream is = new FileInputStream(fileUrl);
+		BufferedReader input = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		String line;
+		while ((line = input.readLine()) != null) {
+			sb.append(line).append("\r\n");
+		}
+		is.close();
+		input.close();
+		return sb.toString();
+	}
+
+	/**
+	 * Select filein directory.
+	 *
+	 * @param filename the filename
+	 * @param path the path
+	 * @return the file
+	 * @throws NullPointerException the null pointer exception
+	 * @throws SecurityException the security exception
+	 */
+	public static File selectFileinDirectory(String filename, String path) throws NullPointerException, SecurityException {
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		for (File listOfFile : listOfFiles) {
+			if (listOfFile.isFile()) {
+				if (listOfFile.getName().contains(filename)) {
+					return listOfFile;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Sort files by date.
+	 *
+	 * @param list the list
+	 */
+	public static void sortFilesByDate(List<File> list) {
+		Collections.sort(list, new Comparator<File>() {
+
+			@Override
+			public int compare(File o1, File o2) {
+				return (int) (o2.lastModified() - o1.lastModified());
+			}
+		});
 	}
 }

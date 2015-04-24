@@ -9,48 +9,49 @@ import java.io.FileInputStream;
  * @author Paul Mai
  */
 public final class ImageChecker {
-	public static boolean isImage(File file) throws Exception {
-		if (isBMP(file)) {
-			return true;
+
+	private enum ImageCode {
+		BMP("bmp", new int[] { 0x42, 0x4d }), GIF("gif", new int[] { 0x47, 0x49, 0x46, 0x38 }), ICO("ico", new int[] { 0x00, 0x00, 0x01, 0x00 }), JPEG(
+				"jpeg", new int[] { 0xff, 0xd8, 0xff }), PNG("png", new int[] { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a });
+
+		private String extension;
+		private int[]  header;
+
+		private ImageCode(String extension, int[] header) {
+			this.extension = extension;
+			this.header = header;
 		}
-		else if (isGIF(file)) {
-			return true;
+
+		public String getExtension() {
+			return this.extension;
 		}
-		else if (isICO(file)) {
-			return true;
-		}
-		else if (isJPEG(file)) {
-			return true;
-		}
-		else if (isPNG(file)) {
-			return true;
-		}
-		else {
-			return false;
+
+		public int[] getHeader() {
+			return this.header;
 		}
 	}
-	
+
 	public static String getImageType(File file) throws Exception {
-		if (isBMP(file)) {
+		if (ImageChecker.isBMP(file)) {
 			return ImageCode.BMP.getExtension();
 		}
-		else if (isGIF(file)) {
+		else if (ImageChecker.isGIF(file)) {
 			return ImageCode.GIF.getExtension();
 		}
-		else if (isICO(file)) {
+		else if (ImageChecker.isICO(file)) {
 			return ImageCode.ICO.getExtension();
 		}
-		else if (isJPEG(file)) {
+		else if (ImageChecker.isJPEG(file)) {
 			return ImageCode.JPEG.getExtension();
 		}
-		else if (isPNG(file)) {
+		else if (ImageChecker.isPNG(file)) {
 			return ImageCode.PNG.getExtension();
-		}		
+		}
 		else {
 			return "N/A";
 		}
 	}
-	
+
 	public static boolean isBMP(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -72,7 +73,7 @@ public final class ImageChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isGIF(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -94,7 +95,7 @@ public final class ImageChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isICO(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -116,7 +117,28 @@ public final class ImageChecker {
 		}
 		return checked;
 	}
-	
+
+	public static boolean isImage(File file) throws Exception {
+		if (ImageChecker.isBMP(file)) {
+			return true;
+		}
+		else if (ImageChecker.isGIF(file)) {
+			return true;
+		}
+		else if (ImageChecker.isICO(file)) {
+			return true;
+		}
+		else if (ImageChecker.isJPEG(file)) {
+			return true;
+		}
+		else if (ImageChecker.isPNG(file)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public static boolean isJPEG(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -138,7 +160,7 @@ public final class ImageChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isPNG(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -159,26 +181,5 @@ public final class ImageChecker {
 			}
 		}
 		return checked;
-	}
-	
-	private enum ImageCode {
-		BMP("bmp", new int[] { 0x42, 0x4d }),
-		GIF("gif", new int[] { 0x47, 0x49, 0x46, 0x38 }),
-		ICO("ico", new int[] { 0x00, 0x00, 0x01, 0x00 }),
-		JPEG("jpeg", new int[] { 0xff, 0xd8, 0xff }),
-		PNG("png", new int[] { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a });
-		
-		private String extension;
-		private int[] header;
-		private ImageCode(String extension, int[] header) {
-			this.extension = extension;
-			this.header = header;
-		}
-		public String getExtension() {
-			return extension;
-		}
-		public int[] getHeader() {
-			return header;
-		}
 	}
 }

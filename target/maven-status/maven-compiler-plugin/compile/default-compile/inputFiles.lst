@@ -1,13 +1,15 @@
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\readfile\FileUtil.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\ImageChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\httpclient\HttpSendGet.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\VideoChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\image\ScaleImages.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\MultimediaChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\readfile\XmlUtil.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\httpclient\HttpUtility.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\GenericFileChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\httpclient\HttpSendPost.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\CompressedChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\filechecker\AudioChecker.java
-D:\FoodMob\Workspace\MyUtility\src\logia\utility\httpclient\HttpSendPut.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\GenericFileChecker.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\readfile\FileUtil.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\video\VideoImageSource.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\VideoChecker.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\httpclient\HttpSendPost.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\image\ScaleImage.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\httpclient\HttpSendGet.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\httpclient\HttpSendPut.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\AudioChecker.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\httpclient\HttpUtility.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\readfile\XmlUtil.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\CompressedChecker.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\image\DrawImage.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\ImageChecker.java
+D:\Box Sync\Workplace\MyUtility\src\logia\utility\filechecker\MultimediaChecker.java

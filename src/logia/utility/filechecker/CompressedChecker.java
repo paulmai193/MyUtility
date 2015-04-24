@@ -9,36 +9,43 @@ import java.io.FileInputStream;
  * @author Paul Mai
  */
 public final class CompressedChecker {
-	public static boolean isCompressed(File file) throws Exception {
-		if (is7Z(file)) {
-			return true;
+
+	private enum CompressedCode {
+		_7Z_7ZIP("7z", new int[] { 0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c }), GZ("gz", new int[] { 0x1f, 0x8b, 0x08 }), ZIP("zip", new int[] { 0x1f,
+				0x8b, 0x08 });
+
+		private String extension;
+		private int[]  header;
+
+		private CompressedCode(String extension, int[] header) {
+			this.extension = extension;
+			this.header = header;
 		}
-		else if (isGZ(file)) {
-			return true;
+
+		public String getExtension() {
+			return this.extension;
 		}
-		else if (isZIP(file)) {
-			return true;
-		}
-		else {
-			return false;
+
+		public int[] getHeader() {
+			return this.header;
 		}
 	}
-	
+
 	public static String getCompressedType(File file) throws Exception {
-		if (is7Z(file)) {
+		if (CompressedChecker.is7Z(file)) {
 			return CompressedCode._7Z_7ZIP.getExtension();
 		}
-		else if (isGZ(file)) {
+		else if (CompressedChecker.isGZ(file)) {
 			return CompressedCode.GZ.getExtension();
-		}	
-		else if (isZIP(file)) {
+		}
+		else if (CompressedChecker.isZIP(file)) {
 			return CompressedCode.ZIP.getExtension();
 		}
 		else {
 			return "N/A";
 		}
 	}
-	
+
 	public static boolean is7Z(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -60,7 +67,22 @@ public final class CompressedChecker {
 		}
 		return checked;
 	}
-	
+
+	public static boolean isCompressed(File file) throws Exception {
+		if (CompressedChecker.is7Z(file)) {
+			return true;
+		}
+		else if (CompressedChecker.isGZ(file)) {
+			return true;
+		}
+		else if (CompressedChecker.isZIP(file)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public static boolean isGZ(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -82,7 +104,7 @@ public final class CompressedChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isZIP(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -103,24 +125,5 @@ public final class CompressedChecker {
 			}
 		}
 		return checked;
-	}
-	
-	private enum CompressedCode {
-		_7Z_7ZIP("7z", new int[] { 0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c }),
-		GZ("gz", new int[] { 0x1f, 0x8b, 0x08 }),
-		ZIP("zip", new int[] { 0x1f, 0x8b, 0x08 });
-		
-		private String extension;
-		private int[] header;
-		private CompressedCode(String extension, int[] header) {
-			this.extension = extension;
-			this.header = header;
-		}
-		public String getExtension() {
-			return extension;
-		}
-		public int[] getHeader() {
-			return header;
-		}
 	}
 }

@@ -18,29 +18,6 @@ public class HttpSendPost extends HttpUtility {
 	/**
 	 * Instantiates a new http send post.
 	 *
-	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
-	 * @param headers the headers
-	 * @param params the params
-	 * @param timeout the connect timeout value in milliseconds 
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public HttpSendPost(String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
-		super(requestURL, isUseCaches, headers, params, timeout);
-		URL url = new URL(requestURL);
-		httpConn = (HttpURLConnection) url.openConnection();
-		httpConn.setConnectTimeout(timeout);
-		httpConn.setUseCaches(isUseCaches);
-		httpConn.setRequestMethod("POST");
-		httpConn.setDoInput(true); // true indicates the server returns response
-		httpConn.setDoOutput(true); // true indicates POST request
-		setHeaders();
-	}
-	
-	/**
-	 * Instantiates a new http send post.
-	 *
 	 * @param proxy the proxy
 	 * @param requestURL the request url
 	 * @param isUseCaches the is use caches
@@ -53,26 +30,51 @@ public class HttpSendPost extends HttpUtility {
 			throws IOException {
 		super(requestURL, isUseCaches, headers, params, timeout);
 		URL url = new URL(requestURL);
-		httpConn = (HttpURLConnection) url.openConnection(proxy);
-		httpConn.setConnectTimeout(timeout);
-		httpConn.setUseCaches(isUseCaches);
-		httpConn.setRequestMethod("POST");
-		httpConn.setDoInput(true); // true indicates the server returns response
-		httpConn.setDoOutput(true); // true indicates POST request
-		setHeaders();
+		this.httpConn = (HttpURLConnection) url.openConnection(proxy);
+		this.httpConn.setConnectTimeout(timeout);
+		this.httpConn.setUseCaches(isUseCaches);
+		this.httpConn.setRequestMethod("POST");
+		this.httpConn.setDoInput(true); // true indicates the server returns response
+		this.httpConn.setDoOutput(true); // true indicates POST request
+		this.setHeaders();
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Instantiates a new http send post.
+	 *
+	 * @param requestURL the request url
+	 * @param isUseCaches the is use caches
+	 * @param headers the headers
+	 * @param params the params
+	 * @param timeout the connect timeout value in milliseconds
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public HttpSendPost(String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
+			throws IOException {
+		super(requestURL, isUseCaches, headers, params, timeout);
+		URL url = new URL(requestURL);
+		this.httpConn = (HttpURLConnection) url.openConnection();
+		this.httpConn.setConnectTimeout(timeout);
+		this.httpConn.setUseCaches(isUseCaches);
+		this.httpConn.setRequestMethod("POST");
+		this.httpConn.setDoInput(true); // true indicates the server returns response
+		this.httpConn.setDoOutput(true); // true indicates POST request
+		this.setHeaders();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see logia.utility.httpclient.HttpUtility#doSend()
 	 */
 	@Override
 	public int execute() throws IOException, TimeoutException {
-		if (params != null && params.size() > 0) {
-			OutputStreamWriter writer = new OutputStreamWriter(httpConn.getOutputStream());
-			writer.write(requestParams.toString());
+		if (this.params != null && this.params.size() > 0) {
+			OutputStreamWriter writer = new OutputStreamWriter(this.httpConn.getOutputStream());
+			writer.write(this.requestParams.toString());
 			writer.flush();
 		}
-		return httpConn.getResponseCode();
+		return this.httpConn.getResponseCode();
 	}
 
 }

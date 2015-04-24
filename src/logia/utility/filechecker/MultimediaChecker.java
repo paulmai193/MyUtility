@@ -9,30 +9,40 @@ import java.io.FileInputStream;
  * @author Paul Mai
  */
 public final class MultimediaChecker {
-	public static boolean isMultimedia(File file) throws Exception {
-		if (is3GPP(file)) {
-			return true;
+
+	private enum MultimediaCode {
+		_3GP_3GPP("3gp", new int[] { 0x00, 0x00, 0x00, 0x14, 0x66, 0x74, 0x79, 0x70 }), _3GP_3GPP2("3gp", new int[] { 0x00, 0x00, 0x00, 0x20, 0x66,
+				0x74, 0x79, 0x70 });
+
+		private String extension;
+		private int[]  header;
+
+		private MultimediaCode(String extension, int[] header) {
+			this.extension = extension;
+			this.header = header;
 		}
-		else if (is3GPP2(file)) {
-			return true;
+
+		public String getExtension() {
+			return this.extension;
 		}
-		else {
-			return false;
+
+		public int[] getHeader() {
+			return this.header;
 		}
 	}
-	
+
 	public static String getMultimediaType(File file) throws Exception {
-		if (is3GPP(file)) {
+		if (MultimediaChecker.is3GPP(file)) {
 			return MultimediaCode._3GP_3GPP.getExtension();
 		}
-		else if (is3GPP2(file)) {
+		else if (MultimediaChecker.is3GPP2(file)) {
 			return MultimediaCode._3GP_3GPP2.getExtension();
-		}	
+		}
 		else {
 			return "N/A";
 		}
 	}
-	
+
 	public static boolean is3GPP(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -54,7 +64,7 @@ public final class MultimediaChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean is3GPP2(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -76,22 +86,16 @@ public final class MultimediaChecker {
 		}
 		return checked;
 	}
-	
-	private enum MultimediaCode {
-		_3GP_3GPP("3gp", new int[] { 0x00, 0x00, 0x00, 0x14, 0x66, 0x74, 0x79, 0x70 }),
-		_3GP_3GPP2("3gp", new int[] { 0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70 });
-		
-		private String extension;
-		private int[] header;
-		private MultimediaCode(String extension, int[] header) {
-			this.extension = extension;
-			this.header = header;
+
+	public static boolean isMultimedia(File file) throws Exception {
+		if (MultimediaChecker.is3GPP(file)) {
+			return true;
 		}
-		public String getExtension() {
-			return extension;
+		else if (MultimediaChecker.is3GPP2(file)) {
+			return true;
 		}
-		public int[] getHeader() {
-			return header;
+		else {
+			return false;
 		}
 	}
 }

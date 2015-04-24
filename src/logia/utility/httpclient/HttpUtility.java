@@ -19,42 +19,42 @@ import java.util.concurrent.TimeoutException;
  * @author Paul Mai
  */
 public abstract class HttpUtility {
-	
+
 	/** The set cookie key. */
-	private final String SET_COOKIE_KEY = "Set-Cookie";
-	
+	private final String          SET_COOKIE_KEY = "Set-Cookie";
+
 	/** The session cookie. */
-	protected String SESSION_COOKIE = "JSESSIONID";
-	
+	protected String              SESSION_COOKIE = "JSESSIONID";
+
 	/** The cookie key. */
-	public static final String COOKIE_KEY = "Cookie";
-	
+	public static final String    COOKIE_KEY     = "Cookie";
+
 	/** The content type. */
-	public static final String CONTENT_TYPE = "Content-Type";
-	
+	public static final String    CONTENT_TYPE   = "Content-Type";
+
 	/** The http conn. */
-	protected HttpURLConnection httpConn;
-	
+	protected HttpURLConnection   httpConn;
+
 	/** The session. */
-	protected String session;
-	
+	protected String              session;
+
 	/** The request url. */
-	protected String requestURL;
-	
+	protected String              requestURL;
+
 	/** The is use caches. */
-	protected boolean isUseCaches;
-	
+	protected boolean             isUseCaches;
+
 	/** The headers. */
 	protected Map<String, String> headers;
-	
+
 	/** The params. */
 	protected Map<String, String> params;
-	
+
 	/** The request params. */
-	protected StringBuffer requestParams = new StringBuffer();
-	
+	protected StringBuffer        requestParams  = new StringBuffer();
+
 	/** The timeout. */
-	protected int timeout;
+	protected int                 timeout;
 
 	/**
 	 * Instantiates a new http utility.
@@ -73,37 +73,15 @@ public abstract class HttpUtility {
 		this.headers = headers;
 		this.params = params;
 		this.timeout = timeout;
-		setParameters();
+		this.setParameters();
 	}
 
 	/**
-	 * Sets the headers.
+	 * Disconnect.
 	 */
-	protected void setHeaders() {
-		for (String key : headers.keySet()) {
-			httpConn.setRequestProperty(key, headers.get(key));
-		}
-	}
-
-	/**
-	 * Sets the parameters, encode them using URLEncoder
-	 */
-	protected void setParameters() {
-		Iterator<String> paramIterator = params.keySet().iterator();
-		while (paramIterator.hasNext()) {
-			String key = paramIterator.next();
-			String value = params.get(key);
-			try {
-				requestParams.append(URLEncoder.encode(key, "UTF-8"));
-				requestParams.append("=").append(URLEncoder.encode(value, "UTF-8"));
-			}
-			catch (UnsupportedEncodingException e) {
-				requestParams.append("=").append(value);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			requestParams.append("&");
+	public void disconnect() {
+		if (this.httpConn != null) {
+			this.httpConn.disconnect();
 		}
 	}
 
@@ -117,6 +95,17 @@ public abstract class HttpUtility {
 	public abstract int execute() throws IOException, TimeoutException;
 
 	/**
+	 * Gets the cookies.
+	 *
+	 * @return the cookies
+	 */
+	public List<String> getCookies() {
+		Map<String, List<String>> headerMaps = this.httpConn.getHeaderFields();
+		List<String> cookies = headerMaps.get(this.SET_COOKIE_KEY);
+		return cookies;
+	}
+
+	/**
 	 * Gets the response content.
 	 *
 	 * @return the response content
@@ -125,9 +114,9 @@ public abstract class HttpUtility {
 	public String getResponseContent() throws IOException {
 		InputStream inputStream = null;
 		StringBuffer jb = new StringBuffer();
-		if (httpConn != null) {
+		if (this.httpConn != null) {
 			try {
-				inputStream = httpConn.getInputStream();
+				inputStream = this.httpConn.getInputStream();
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -153,29 +142,18 @@ public abstract class HttpUtility {
 	}
 
 	/**
-	 * Gets the cookies.
-	 *
-	 * @return the cookies
-	 */
-	public List<String> getCookies() {
-		Map<String, List<String>> headerMaps = httpConn.getHeaderFields();		
-		List<String> cookies = headerMaps.get(SET_COOKIE_KEY);	
-		return cookies;
-	}
-	
-	/**
 	 * Gets the session id.
 	 *
 	 * @return the session id
 	 */
 	public String getSessionId() {
 		String sessionId = null;
-		for (String cookie : getCookies()) {
+		for (String cookie : this.getCookies()) {
 			if (cookie.toLowerCase().contains("sessionid")) {
 				String[] arr = cookie.split(";");
-				for (int i = 0; i < arr.length; i++) {
-					if (arr[i].toLowerCase().contains("sessionid")) {
-						sessionId = arr[i];
+				for (String element : arr) {
+					if (element.toLowerCase().contains("sessionid")) {
+						sessionId = element;
 					}
 				}
 			}
@@ -184,11 +162,33 @@ public abstract class HttpUtility {
 	}
 
 	/**
-	 * Disconnect.
+	 * Sets the headers.
 	 */
-	public void disconnect() {
-		if (httpConn != null) {
-			httpConn.disconnect();
+	protected void setHeaders() {
+		for (String key : this.headers.keySet()) {
+			this.httpConn.setRequestProperty(key, this.headers.get(key));
+		}
+	}
+
+	/**
+	 * Sets the parameters, encode them using URLEncoder
+	 */
+	protected void setParameters() {
+		Iterator<String> paramIterator = this.params.keySet().iterator();
+		while (paramIterator.hasNext()) {
+			String key = paramIterator.next();
+			String value = this.params.get(key);
+			try {
+				this.requestParams.append(URLEncoder.encode(key, "UTF-8"));
+				this.requestParams.append("=").append(URLEncoder.encode(value, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e) {
+				this.requestParams.append("=").append(value);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			this.requestParams.append("&");
 		}
 	}
 }

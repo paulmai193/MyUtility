@@ -14,17 +14,17 @@ import org.w3c.dom.NodeList;
  * @author Paul Mai
  */
 public class XmlUtil {
-	
+
 	/** The xml file path. */
 	String xmlFilePath;
-	
+
 	/**
 	 * Instantiates a new xml ultility.
 	 */
 	public XmlUtil() {
-		
+
 	}
-	
+
 	/**
 	 * Instantiates a new xml reader.
 	 * 
@@ -33,59 +33,7 @@ public class XmlUtil {
 	public XmlUtil(String xmlFilePath) {
 		this.xmlFilePath = xmlFilePath;
 	}
-	
-	/**
-	 * Gets the root element.
-	 * 
-	 * @return the root. NULL if document given by file path not xml format.
-	 */
-	public Element getRoot() {
-		Element root = null;
-		try {
-			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFilePath);
-			doc.getDocumentElement().normalize();
-			root = doc.getDocumentElement();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return root;
-	}
-	
-	/**
-	 * Gets the list node in specific element by tag name.
-	 * 
-	 * @param tagName the tag name
-	 * @param element the element
-	 * @return the list node. NULL if cannot file any node given by tag name.
-	 */
-	public NodeList getListNode(String tagName, Element element) {
-		if (element == null) {
-			return null;
-		}
-		else {
-			NodeList nodeList = element.getElementsByTagName(tagName);
-			return nodeList;
-		}
-	}
-	
-	/**
-	 * Gets the value.
-	 * 
-	 * @param node the node
-	 * @return the value. Null if the given node is Null or not have any content.
-	 */
-	public String getValue(Node node) {
-		if (node == null) {
-			return null;
-		}
-		else {
-			return node.getTextContent();
-		}
-		
-	}
-	
+
 	/**
 	 * Gets the attribute.
 	 * 
@@ -103,5 +51,57 @@ public class XmlUtil {
 			attValue = null;
 		}
 		return attValue;
+	}
+
+	/**
+	 * Gets the list node in specific element by tag name.
+	 * 
+	 * @param tagName the tag name
+	 * @param element the element
+	 * @return the list node. NULL if cannot file any node given by tag name.
+	 */
+	public NodeList getListNode(String tagName, Element element) {
+		if (element == null) {
+			return null;
+		}
+		else {
+			NodeList nodeList = element.getElementsByTagName(tagName);
+			return nodeList;
+		}
+	}
+
+	/**
+	 * Gets the root element.
+	 * 
+	 * @return the root. NULL if document given by file path not xml format.
+	 */
+	public Element getRoot() {
+		Element root = null;
+		try {
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = dBuilder.parse(this.xmlFilePath);
+			doc.getDocumentElement().normalize();
+			root = doc.getDocumentElement();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return root;
+	}
+
+	/**
+	 * Gets the value.
+	 * 
+	 * @param node the node
+	 * @return the value. Null if the given node is Null or not have any content.
+	 */
+	public String getValue(Node node) {
+		if (node == null) {
+			return null;
+		}
+		else {
+			return node.getTextContent();
+		}
+
 	}
 }

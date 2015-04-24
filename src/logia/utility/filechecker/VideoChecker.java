@@ -9,78 +9,67 @@ import java.io.FileInputStream;
  * @author Paul Mai
  */
 public final class VideoChecker {
-	public static boolean isVideo(File file) throws Exception {
-		if (is3GP5_MPEG4(file)) {
-			return true;
+
+	private enum VideoCode {
+		_3GP5_MPEG4("3gp", new int[] { 0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70 }), ASF("asf", new int[] { 0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66,
+				0xcf, 0x11 }), AVI("avi", new int[] { 0x52, 0x49, 0x46, 0x46 }), MKV("mkv", new int[] { 0x1a, 0x45, 0xdf, 0xa3, 0x93, 0x42, 0x82,
+						0x88 }), MOV_1("mov", new int[] { 0x6d, 0x6d, 0x6f, 0x76 }), MOV_2("mov", new int[] { 0x66, 0x72, 0x65, 0x65 }), MOV_3("mov",
+								new int[] { 0x6d, 0x64, 0x61, 0x74 }), MOV_4("mov", new int[] { 0x77, 0x69, 0x64, 0x65 }), MOV_5("mov", new int[] { 0x70, 0x6e, 0x6f,
+										0x74 }), MOV_6("mov", new int[] { 0x73, 0x6b, 0x69, 0x70 });
+
+		private String extension;
+		private int[]  header;
+
+		private VideoCode(String extension, int[] header) {
+			this.extension = extension;
+			this.header = header;
 		}
-		else if (isASF(file)) {
-			return true;
+
+		public String getExtension() {
+			return this.extension;
 		}
-		else if (isAVI(file)) {
-			return true;
-		}
-		else if (isMKV(file)) {
-			return true;
-		}
-		else if (isMOV_1(file)) {
-			return true;
-		}
-		else if (isMOV_2(file)) {
-			return true;
-		}
-		else if (isMOV_3(file)) {
-			return true;
-		}
-		else if (isMOV_4(file)) {
-			return true;
-		}
-		else if (isMOV_5(file)) {
-			return true;
-		}
-		else if (isMOV_6(file)) {
-			return true;
-		}
-		else {
-			return false;
+
+		public int[] getHeader() {
+			return this.header;
 		}
 	}
-	
+
 	public static String getVideoType(File file) throws Exception {
-		if (is3GP5_MPEG4(file)) {
+		if (VideoChecker.is3GP5_MPEG4(file)) {
 			return VideoCode._3GP5_MPEG4.getExtension();
 		}
-		else if (isASF(file)) {
+		else if (VideoChecker.isASF(file)) {
 			return VideoCode.ASF.getExtension();
 		}
-		else if (isAVI(file)) {
+		else if (VideoChecker.isAVI(file)) {
 			return VideoCode.AVI.getExtension();
 		}
-		else if (isMKV(file)) {
+		else if (VideoChecker.isMKV(file)) {
 			return VideoCode.MKV.getExtension();
 		}
-		else if (isMOV_1(file)) {
+		else if (VideoChecker.isMOV_1(file)) {
 			return VideoCode.MOV_1.getExtension();
 		}
-		else if (isMOV_2(file)) {
+		else if (VideoChecker.isMOV_2(file)) {
 			return VideoCode.MOV_2.getExtension();
 		}
-		else if (isMOV_3(file)) {
+		else if (VideoChecker.isMOV_3(file)) {
 			return VideoCode.MOV_3.getExtension();
 		}
-		else if (isMOV_4(file)) {
+		else if (VideoChecker.isMOV_4(file)) {
 			return VideoCode.MOV_4.getExtension();
 		}
-		else if (isMOV_5(file)) {
+		else if (VideoChecker.isMOV_5(file)) {
 			return VideoCode.MOV_5.getExtension();
 		}
-		else if (isMOV_6(file)) {
+		else if (VideoChecker.isMOV_6(file)) {
 			return VideoCode.MOV_6.getExtension();
 		}
 		else {
 			return "N/A";
 		}
 	}
-	
+
 	public static boolean is3GP5_MPEG4(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -102,7 +91,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isASF(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -124,7 +113,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isAVI(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -146,7 +135,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMKV(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -168,7 +157,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_1(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -190,7 +179,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_2(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -212,7 +201,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_3(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -234,7 +223,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_4(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -256,7 +245,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_5(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -278,7 +267,7 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
+
 	public static boolean isMOV_6(File file) throws Exception {
 		boolean checked = false;
 		if (file.exists()) {
@@ -300,30 +289,40 @@ public final class VideoChecker {
 		}
 		return checked;
 	}
-	
-	private enum VideoCode {
-		_3GP5_MPEG4("3gp", new int[] { 0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70 }),
-		ASF("asf", new int[] { 0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11 }),
-		AVI("avi", new int[] { 0x52, 0x49, 0x46, 0x46 }),
-		MKV("mkv", new int[] { 0x1a, 0x45, 0xdf, 0xa3, 0x93, 0x42, 0x82, 0x88 }),
-		MOV_1("mov", new int[] { 0x6d, 0x6d, 0x6f, 0x76 }),
-		MOV_2("mov", new int[] { 0x66, 0x72, 0x65, 0x65 }),
-		MOV_3("mov", new int[] { 0x6d, 0x64, 0x61, 0x74 }),
-		MOV_4("mov", new int[] { 0x77, 0x69, 0x64, 0x65 }),
-		MOV_5("mov", new int[] { 0x70, 0x6e, 0x6f, 0x74 }),
-		MOV_6("mov", new int[] { 0x73, 0x6b, 0x69, 0x70 });
-		
-		private String extension;
-		private int[] header;
-		private VideoCode(String extension, int[] header) {
-			this.extension = extension;
-			this.header = header;
+
+	public static boolean isVideo(File file) throws Exception {
+		if (VideoChecker.is3GP5_MPEG4(file)) {
+			return true;
 		}
-		public String getExtension() {
-			return extension;
+		else if (VideoChecker.isASF(file)) {
+			return true;
 		}
-		public int[] getHeader() {
-			return header;
+		else if (VideoChecker.isAVI(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMKV(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_1(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_2(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_3(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_4(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_5(file)) {
+			return true;
+		}
+		else if (VideoChecker.isMOV_6(file)) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 }

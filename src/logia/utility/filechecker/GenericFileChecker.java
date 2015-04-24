@@ -11,73 +11,9 @@ import java.io.IOException;
  */
 public final class GenericFileChecker {
 
-	public static boolean isRecognize(byte[] bytes) {
-		boolean isRecognize = false;
-		
-		FileOutputStream fOut = null;
-		File tempFile = null;
-		try {
-			String PREFIX = "stream2file";
-			String SUFFIX = ".tmp";
-			tempFile = File.createTempFile(PREFIX, SUFFIX);
-			tempFile.deleteOnExit();
-			fOut = new FileOutputStream(tempFile);
-			fOut.write(bytes);
-			fOut.flush();
-			
-			isRecognize = isRecognize(tempFile);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				fOut.close();
-				fOut = null;
-			}
-			catch (IOException e) {				
-			}
-			try {
-				tempFile.delete();
-				tempFile = null;
-			}
-			catch (Exception e) {				
-			}
-			
-		}
-		return isRecognize;
-	}
-
-	public static boolean isRecognize(File file) {
-		try {
-			if (AudioChecker.isAudio(file)) {
-				return true;
-			}
-			else if (ImageChecker.isImage(file)) {
-				return true;
-			}
-			else if (VideoChecker.isVideo(file)) {
-				return true;
-			}
-			else if (MultimediaChecker.isMultimedia(file)) {
-				return true;
-			}
-			else if (CompressedChecker.isCompressed(file)) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}		
-	}
-
 	public static String getType(byte[] bytes) {
 		String type = "";
-		
+
 		FileOutputStream fOut = null;
 		File tempFile = null;
 		try {
@@ -88,8 +24,8 @@ public final class GenericFileChecker {
 			fOut = new FileOutputStream(tempFile);
 			fOut.write(bytes);
 			fOut.flush();
-			
-			type = getType(tempFile);
+
+			type = GenericFileChecker.getType(tempFile);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -99,15 +35,15 @@ public final class GenericFileChecker {
 				fOut.close();
 				fOut = null;
 			}
-			catch (IOException e) {				
+			catch (IOException e) {
 			}
 			try {
 				tempFile.delete();
 				tempFile = null;
 			}
-			catch (Exception e) {				
+			catch (Exception e) {
 			}
-			
+
 		}
 		return type;
 	}
@@ -138,5 +74,69 @@ public final class GenericFileChecker {
 			return null;
 		}
 	}
-	
+
+	public static boolean isRecognize(byte[] bytes) {
+		boolean isRecognize = false;
+
+		FileOutputStream fOut = null;
+		File tempFile = null;
+		try {
+			String PREFIX = "stream2file";
+			String SUFFIX = ".tmp";
+			tempFile = File.createTempFile(PREFIX, SUFFIX);
+			tempFile.deleteOnExit();
+			fOut = new FileOutputStream(tempFile);
+			fOut.write(bytes);
+			fOut.flush();
+
+			isRecognize = GenericFileChecker.isRecognize(tempFile);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				fOut.close();
+				fOut = null;
+			}
+			catch (IOException e) {
+			}
+			try {
+				tempFile.delete();
+				tempFile = null;
+			}
+			catch (Exception e) {
+			}
+
+		}
+		return isRecognize;
+	}
+
+	public static boolean isRecognize(File file) {
+		try {
+			if (AudioChecker.isAudio(file)) {
+				return true;
+			}
+			else if (ImageChecker.isImage(file)) {
+				return true;
+			}
+			else if (VideoChecker.isVideo(file)) {
+				return true;
+			}
+			else if (MultimediaChecker.isMultimedia(file)) {
+				return true;
+			}
+			else if (CompressedChecker.isCompressed(file)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

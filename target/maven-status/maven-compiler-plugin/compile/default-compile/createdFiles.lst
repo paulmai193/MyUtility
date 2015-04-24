@@ -9,11 +9,13 @@ logia\utility\filechecker\ImageChecker$ImageCode.class
 logia\utility\filechecker\MultimediaChecker$MultimediaCode.class
 logia\utility\filechecker\ImageChecker.class
 logia\utility\readfile\XmlUtil.class
+logia\utility\image\DrawImage.class
 logia\utility\filechecker\MultimediaChecker.class
 logia\utility\filechecker\AudioChecker.class
+logia\utility\video\VideoImageSource.class
+logia\utility\image\ScaleImage.class
 logia\utility\httpclient\HttpSendGet.class
 logia\utility\readfile\FileUtil$1.class
 logia\utility\httpclient\HttpSendPost.class
 logia\utility\filechecker\CompressedChecker$CompressedCode.class
 logia\utility\httpclient\HttpSendPut.class
-logia\utility\image\ScaleImages.class
