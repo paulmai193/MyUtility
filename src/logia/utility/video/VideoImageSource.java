@@ -91,21 +91,6 @@ public class VideoImageSource {
 		this.m_url = _url;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#finalize()
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		try {
-			this.file.delete();
-		}
-		catch (Exception e) {
-		}
-		super.finalize();
-	}
-
 	/**
 	 * Get a {@link BufferedImage} from the vedio file at a specific media time.
 	 *
@@ -135,6 +120,29 @@ public class VideoImageSource {
 	}
 
 	/**
+	 * Get the pre-set media time for this video.
+	 *
+	 * @return a double representing the media time
+	 */
+	public double getMediaTime() {
+		return this.m_media_time;
+	}
+
+	// /////////////////////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////////////
+	/**
+	 * Set a specific media time to the vedio file.
+	 *
+	 * @param _time a double of the media time
+	 */
+	public void setMediaTime(double _time) {
+		this.m_media_time = _time;
+	}
+
+	// /////////////////////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////////////
+
+	/**
 	 * Get an image at a specific media time from a video file.
 	 *
 	 * @param _url the {@link URL} of the source video file
@@ -148,7 +156,7 @@ public class VideoImageSource {
 		Player m_player = null;
 
 		// Create a realized player.
-		MediaLocator mediaLocator = new MediaLocator("file:\\\\\\" + file.getPath());
+		MediaLocator mediaLocator = new MediaLocator("file:\\\\\\" + this.file.getPath());
 		m_player = Manager.createRealizedPlayer(mediaLocator);
 
 		if (m_player != null) {
@@ -182,26 +190,18 @@ public class VideoImageSource {
 		return _return;
 	}
 
-	// /////////////////////////////////////////////////////////////////////////
-	// /////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Get the pre-set media time for this video.
-	 *
-	 * @return a double representing the media time
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#finalize()
 	 */
-	public double getMediaTime() {
-		return this.m_media_time;
-	}
-
-	// /////////////////////////////////////////////////////////////////////////
-	// /////////////////////////////////////////////////////////////////////////
-	/**
-	 * Set a specific media time to the vedio file.
-	 *
-	 * @param _time a double of the media time
-	 */
-	public void setMediaTime(double _time) {
-		this.m_media_time = _time;
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			this.file.delete();
+		}
+		catch (Exception e) {
+		}
+		super.finalize();
 	}
 }
