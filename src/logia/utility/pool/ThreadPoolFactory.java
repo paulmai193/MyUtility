@@ -1,7 +1,7 @@
 package logia.utility.pool;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
 /**
@@ -53,7 +53,7 @@ public class ThreadPoolFactory {
 	private static final ThreadPoolFactory instance = new ThreadPoolFactory();
 
 	/** The thread pool. */
-	private static ExecutorService         _pool;
+	private static ThreadPoolExecutor      _pool;
 
 	/** The logger. */
 	private Logger                         _logger  = Logger.getLogger(ThreadPoolFactory.class.getName());
@@ -64,18 +64,23 @@ public class ThreadPoolFactory {
 	 * @param poolSize the pool size
 	 */
 	public void connect() {
-		ThreadPoolFactory._pool = Executors.newFixedThreadPool(10, new MyThreadFactory());
+		ThreadPoolFactory._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory());
+		ThreadPoolFactory._pool.setCorePoolSize(4);
+		ThreadPoolFactory._pool.setMaximumPoolSize(10);
 		this._logger.info("Init thread pool");
 	}
 
 	/**
 	 * Connect.
 	 *
-	 * @param numThreads the num threads
+	 * @param coreThreads the number of core threads
+	 * @param maxThreads the max number of threads
 	 * @param threadPriority the thread priority
 	 */
-	public void connect(int numThreads, int threadPriority) {
-		ThreadPoolFactory._pool = Executors.newFixedThreadPool(numThreads, new MyThreadFactory(threadPriority));
+	public void connect(int coreThreads, int maxThreads, int threadPriority) {
+		ThreadPoolFactory._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory(threadPriority));
+		ThreadPoolFactory._pool.setCorePoolSize(coreThreads);
+		ThreadPoolFactory._pool.setMaximumPoolSize(maxThreads);
 		this._logger.info("Init thread pool");
 	}
 
