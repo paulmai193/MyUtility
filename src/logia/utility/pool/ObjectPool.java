@@ -81,6 +81,15 @@ public abstract class ObjectPool<T> {
 	}
 
 	/**
+	 * Gets the pool size.
+	 *
+	 * @return the pool size
+	 */
+	public int getPoolSize() {
+		return this.pool.size();
+	}
+
+	/**
 	 * Returns object back to the pool.
 	 *
 	 * @param object object to be returned
@@ -99,6 +108,9 @@ public abstract class ObjectPool<T> {
 	public void shutdown() {
 		if (this.executorService != null) {
 			this.executorService.shutdown();
+		}
+		if (this.pool != null) {
+			this.pool.clear();
 		}
 	}
 
