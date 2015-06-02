@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>logia</groupId>
 	<artifactId>logia-utility</artifactId>
-	<version>0.0.9</version>
+	<version>0.1.0</version>
 	<repositories>
 		<repository>
 			<id>com.springsource.repository.bundles.external</id>
@@ -45,6 +45,11 @@
 			<groupId>javax.media</groupId>
 			<artifactId>jmf</artifactId>
 			<version>2.1.1e</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 	</dependencies>
 </project>
