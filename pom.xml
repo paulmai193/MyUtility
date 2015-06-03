@@ -12,7 +12,7 @@
 		</repository>
 	</repositories>
 	<build>
-		<defaultGoal>clean source:jar install</defaultGoal>
+		<defaultGoal>source:jar install</defaultGoal>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>

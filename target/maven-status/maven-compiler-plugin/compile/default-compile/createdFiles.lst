@@ -13,8 +13,8 @@ logia\utility\pool\ThreadPoolFactory$MyThreadFactory.class
 logia\utility\filechecker\AudioChecker$AudioCode.class
 logia\utility\filechecker\VideoChecker.class
 logia\utility\filechecker\CompressedChecker.class
-logia\utility\json\annotaion\JsonObject.class
 logia\utility\pool\ThreadPoolFactory.class
+logia\utility\json\annotaion\JsonObject.class
 logia\utility\filechecker\ImageChecker.class
 logia\utility\filechecker\MultimediaChecker$MultimediaCode.class
 logia\utility\readfile\XmlUtil.class

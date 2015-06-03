@@ -1,6 +1,7 @@
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\readfile\XmlUtil.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\filechecker\ImageChecker.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\json\annotaion\JsonKey.java
+C:\Users\Paul Mai\git\MyUtility\src\logia\utility\reflection\ClassUtil.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\pool\ObjectPool.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\readfile\FileUtil.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\video\VideoImageSource.java
@@ -10,6 +11,7 @@ C:\Users\Paul Mai\git\MyUtility\src\logia\utility\pool\ThreadPoolFactory.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\httpclient\HttpSendPost.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\json\annotaion\JsonObject.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\httpclient\HttpUtility.java
+C:\Users\Paul Mai\git\MyUtility\src\logia\utility\reflection\MethodUtil.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\filechecker\CompressedChecker.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\image\DrawImage.java
 C:\Users\Paul Mai\git\MyUtility\src\logia\utility\filechecker\MultimediaChecker.java

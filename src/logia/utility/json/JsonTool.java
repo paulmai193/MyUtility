@@ -2,9 +2,12 @@ package logia.utility.json;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import logia.utility.json.annotaion.JsonKey;
+import logia.utility.reflection.ClassUtil;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,7 +38,7 @@ public class JsonTool {
 	}
 
 	/**
-	 * To json object.
+	 * Parse object to json object. This object require implement @JsonObject annotation
 	 *
 	 * @param object the object
 	 * @return the json object
@@ -48,31 +51,40 @@ public class JsonTool {
 			for (Field field : fields) {
 				field.setAccessible(true);
 				Annotation fieldAnnotation = field.getAnnotation(JsonKey.class);
-				if (fieldAnnotation != null && fieldAnnotation instanceof JsonKey) {
+				if (fieldAnnotation != null) {
 					JsonKey key = (JsonKey) fieldAnnotation;
-
 					try {
-						Object value = field.get(object);
-						if (value instanceof Boolean) {
-							jsonObject.addProperty(key.key(), (Boolean) value);
-						}
-						else if (value instanceof Character) {
-							jsonObject.addProperty(key.key(), (Character) value);
-						}
-						else if (value instanceof Number) {
-							jsonObject.addProperty(key.key(), (Number) value);
-						}
-						else if (value instanceof String) {
-							jsonObject.addProperty(key.key(), (String) value);
-						}
-						else if (object instanceof JsonElement) {
-							jsonObject.add(key.key(), (JsonElement) value);
-						}
-						else if (isJsonObject(value)) {
-							jsonObject.add(key.key(), toJsonObject(value));
+						Method getter = ClassUtil.findGetter(clazz, field);
+						if (getter != null) {
+							Object value = getter.invoke(object);
+
+							if (value == null) {
+								jsonObject.addProperty(key.key(), "");
+							}
+							else if (value instanceof Boolean) {
+								jsonObject.addProperty(key.key(), (Boolean) value);
+							}
+							else if (value instanceof Character) {
+								jsonObject.addProperty(key.key(), (Character) value);
+							}
+							else if (value instanceof Number) {
+								jsonObject.addProperty(key.key(), (Number) value);
+							}
+							else if (value instanceof String) {
+								jsonObject.addProperty(key.key(), (String) value);
+							}
+							else if (value instanceof JsonElement) {
+								jsonObject.add(key.key(), (JsonElement) value);
+							}
+							else if (isJsonObject(value)) {
+								jsonObject.add(key.key(), toJsonObject(value));
+							}
+							else {
+								jsonObject.addProperty(key.key(), value.toString());
+							}
 						}
 					}
-					catch (IllegalArgumentException | IllegalAccessException e) {
+					catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
 				}
@@ -85,7 +97,7 @@ public class JsonTool {
 	}
 
 	/**
-	 * To json array.
+	 * Parse array of object to json array.
 	 *
 	 * @param arrayObject the array object
 	 * @return the json array
@@ -115,7 +127,6 @@ public class JsonTool {
 			else if (isJsonObject(object)) {
 				jsonArray.add(toJsonObject(object));
 			}
-
 		}
 		return jsonArray;
 	}
@@ -129,7 +140,7 @@ public class JsonTool {
 	private static boolean isJsonObject(Object object) {
 		Class<?> clazz = object.getClass();
 		Annotation clazzAnnotation = clazz.getAnnotation(logia.utility.json.annotaion.JsonObject.class);
-		if (clazzAnnotation != null && clazzAnnotation instanceof logia.utility.json.annotaion.JsonObject) {
+		if (clazzAnnotation != null) {
 			return true;
 		}
 		else {
