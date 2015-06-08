@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @author Paul Mai
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.FIELD })
+@Target(value = { ElementType.FIELD, ElementType.METHOD })
 public @interface JsonKey {
 
 	/**

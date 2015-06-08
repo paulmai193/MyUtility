@@ -7,7 +7,14 @@ public class ClassUtil {
 
 	public static Method findGetter(Class<?> clazz, Field field) {
 		String fieldName = field.getName();
-		String methodName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+		String methodName;
+		if (field.getType().getName().equals(Boolean.class.getName())) {
+			methodName = "is" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+		}
+		else {
+			methodName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+		}
+
 		try {
 			Method method = clazz.getMethod(methodName);
 			if (MethodUtil.isGetter(method)) {

@@ -20,6 +20,51 @@ import org.apache.commons.io.FileUtils;
 public final class ScaleImage {
 
 	/**
+	 * Scale the image. If the new size bigger than original size, keep this size and copy image to target location
+	 *
+	 * @param sourceFile the source file
+	 * @param targetFile the target file
+	 * @param newSize the new size
+	 * @throws Exception
+	 */
+	public static void doScale(File sourceFile, File targetFile, double newSize) throws Exception {
+		if (sourceFile.exists() && ImageChecker.isImage(sourceFile)) {
+			Image image = ImageIO.read(sourceFile);
+			BufferedImage sbi = (BufferedImage) image;
+			/* Get size of image */
+			Double width = (double) sbi.getWidth();
+			Double height = (double) sbi.getHeight();
+			Double d;
+			/* Get proportion of scaled image */
+			if (newSize > height && newSize > width) {
+				FileUtils.copyFile(sourceFile, targetFile);
+			}
+			else {
+				if (width > height) {
+					d = width / height;
+					height = newSize;
+					width = height * d;
+				}
+				else {
+					d = height / width;
+					width = newSize;
+					height = width * d;
+				}
+				/* Scale this image */
+				BufferedImage dbi = null;
+				if (sbi != null) {
+					dbi = new BufferedImage(width.intValue(), height.intValue(), sbi.getType());
+					Graphics2D g = dbi.createGraphics();
+					g.drawImage(sbi, 0, 0, width.intValue(), height.intValue(), null);
+					g.dispose();
+				}
+				/* retrieve image */
+				ImageIO.write(dbi, "png", targetFile);
+			}
+		}
+	}
+
+	/**
 	 * Scale image.
 	 * 
 	 * @deprecated. Use {@code "doScale(File sourceFile, File targetFile, double newSize)"} instead
@@ -62,51 +107,6 @@ public final class ScaleImage {
 			/* retrieve image */
 			File outputfile = new File(targetLocation + System.getProperty("file.separator") + fileImage);
 			ImageIO.write(dbi, "png", outputfile);
-		}
-	}
-
-	/**
-	 * Scale the image. If the new size bigger than original size, keep this size and copy image to target location
-	 *
-	 * @param sourceFile the source file
-	 * @param targetFile the target file
-	 * @param newSize the new size
-	 * @throws Exception
-	 */
-	public static void doScale(File sourceFile, File targetFile, double newSize) throws Exception {
-		if (sourceFile.exists() && ImageChecker.isImage(sourceFile)) {
-			Image image = ImageIO.read(sourceFile);
-			BufferedImage sbi = (BufferedImage) image;
-			/* Get size of image */
-			Double width = (double) sbi.getWidth();
-			Double height = (double) sbi.getHeight();
-			Double d;
-			/* Get proportion of scaled image */
-			if (newSize > height && newSize > width) {
-				FileUtils.copyFile(sourceFile, targetFile);
-			}
-			else {
-				if (width > height) {
-					d = width / height;
-					height = newSize;
-					width = height * d;
-				}
-				else {
-					d = height / width;
-					width = newSize;
-					height = width * d;
-				}
-				/* Scale this image */
-				BufferedImage dbi = null;
-				if (sbi != null) {
-					dbi = new BufferedImage(width.intValue(), height.intValue(), sbi.getType());
-					Graphics2D g = dbi.createGraphics();
-					g.drawImage(sbi, 0, 0, width.intValue(), height.intValue(), null);
-					g.dispose();
-				}
-				/* retrieve image */
-				ImageIO.write(dbi, "png", targetFile);
-			}
 		}
 	}
 }
