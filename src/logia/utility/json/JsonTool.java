@@ -140,7 +140,7 @@ public class JsonTool {
 					}
 				}
 
-				// Iterate fields with JsonKey annotation
+				// Iterate methods with JsonKey annotation
 				Method[] methods = clazz.getDeclaredMethods();
 				for (Method method : methods) {
 					if (MethodUtil.isSetter(method)) {

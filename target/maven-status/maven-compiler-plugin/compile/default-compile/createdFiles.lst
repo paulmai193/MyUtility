@@ -6,15 +6,14 @@ logia\utility\filechecker\ImageChecker$ImageCode.class
 logia\utility\httpclient\HttpUtility.class
 logia\utility\filechecker\AudioChecker.class
 logia\utility\image\DrawImage.class
-logia\utility\video\VideoImageSource.class
 logia\utility\image\ScaleImage.class
 logia\utility\pool\ObjectPool$1.class
 logia\utility\pool\ThreadPoolFactory$MyThreadFactory.class
 logia\utility\filechecker\AudioChecker$AudioCode.class
 logia\utility\filechecker\VideoChecker.class
 logia\utility\filechecker\CompressedChecker.class
-logia\utility\pool\ThreadPoolFactory.class
 logia\utility\json\annotaion\JsonObject.class
+logia\utility\pool\ThreadPoolFactory.class
 logia\utility\filechecker\ImageChecker.class
 logia\utility\filechecker\MultimediaChecker$MultimediaCode.class
 logia\utility\readfile\XmlUtil.class
