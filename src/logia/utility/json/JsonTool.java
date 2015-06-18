@@ -186,7 +186,7 @@ public class JsonTool {
 									ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
 									String valueClassName = pt.getActualTypeArguments()[0].toString();
 									method.invoke(object,
-									        JsonTool.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
+											JsonTool.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
 								}
 							}
 							catch (IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {

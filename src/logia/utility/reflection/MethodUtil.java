@@ -36,6 +36,6 @@ public class MethodUtil {
 	 */
 	public static boolean isSetter(Method method) {
 		return Modifier.isPublic(method.getModifiers()) && method.getReturnType().equals(void.class) && method.getParameterTypes().length == 1
-		        && method.getName().matches("^set.*");
+				&& method.getName().matches("^set.*");
 	}
 }
