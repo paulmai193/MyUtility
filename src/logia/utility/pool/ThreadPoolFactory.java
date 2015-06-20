@@ -2,6 +2,7 @@ package logia.utility.pool;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -14,7 +15,7 @@ public class ThreadPoolFactory {
 	/**
 	 * A factory for creating MyThread objects.
 	 */
-	public class MyThreadFactory implements java.util.concurrent.ThreadFactory {
+	private class MyThreadFactory implements java.util.concurrent.ThreadFactory {
 
 		/** The priority. */
 		private int priority;
@@ -50,23 +51,91 @@ public class ThreadPoolFactory {
 	}
 
 	/** The Constant instance. */
+	@Deprecated
 	private static final ThreadPoolFactory instance = new ThreadPoolFactory();
 
 	/** The thread pool. */
-	private static ThreadPoolExecutor      _pool;
+	private ThreadPoolExecutor             _pool;
 
 	/** The logger. */
 	private Logger                         _logger  = Logger.getLogger(ThreadPoolFactory.class.getName());
 
 	/**
-	 * Inits the pool.
-	 *
-	 * @param poolSize the pool size
+	 * Instantiates a new thread pool factory with default 1 thread in pool.
 	 */
+	public ThreadPoolFactory() {
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1, new MyThreadFactory());
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Instantiates a new thread pool factory.
+	 *
+	 * @param nThreads the number threads in pool
+	 */
+	public ThreadPoolFactory(int nThreads) {
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory());
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Instantiates a new thread pool factory.
+	 *
+	 * @param nThreads the number threads in pool
+	 * @param threadPriority the thread priority
+	 */
+	public ThreadPoolFactory(int nThreads, int threadPriority) {
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory(threadPriority));
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Instantiates a new thread pool factory.
+	 *
+	 * @param coreThreads the core threads
+	 * @param maxThreads the max threads
+	 * @param threadPriority the thread priority
+	 * @param isCached the is cached
+	 */
+	public ThreadPoolFactory(int coreThreads, int maxThreads, int threadPriority, boolean isCached) {
+		this._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory(threadPriority));
+		this._pool.setCorePoolSize(coreThreads);
+		this._pool.setMaximumPoolSize(maxThreads);
+		if (!isCached) {
+			this._pool.setKeepAliveTime(0, TimeUnit.MILLISECONDS);
+		}
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Inits the pool.
+	 */
+	@Deprecated
 	public void connect() {
-		ThreadPoolFactory._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory());
-		ThreadPoolFactory._pool.setCorePoolSize(4);
-		ThreadPoolFactory._pool.setMaximumPoolSize(10);
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1, new MyThreadFactory());
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Connect.
+	 *
+	 * @param nThreads the number threads in pool
+	 */
+	@Deprecated
+	public void connect(int nThreads) {
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory());
+		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Connect.
+	 *
+	 * @param nThreads the number threads in pool
+	 * @param threadPriority the thread priority
+	 */
+	@Deprecated
+	public void connect(int nThreads, int threadPriority) {
+		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory(threadPriority));
 		this._logger.info("Init thread pool");
 	}
 
@@ -76,25 +145,57 @@ public class ThreadPoolFactory {
 	 * @param coreThreads the number of core threads
 	 * @param maxThreads the max number of threads
 	 * @param threadPriority the thread priority
+	 * @param isCached the is cached
 	 */
-	public void connect(int coreThreads, int maxThreads, int threadPriority) {
-		ThreadPoolFactory._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory(threadPriority));
-		ThreadPoolFactory._pool.setCorePoolSize(coreThreads);
-		ThreadPoolFactory._pool.setMaximumPoolSize(maxThreads);
+	@Deprecated
+	public void connect(int coreThreads, int maxThreads, int threadPriority, boolean isCached) {
+		this._pool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new MyThreadFactory(threadPriority));
+		this._pool.setCorePoolSize(coreThreads);
+		this._pool.setMaximumPoolSize(maxThreads);
+		if (!isCached) {
+			this._pool.setKeepAliveTime(0, TimeUnit.MILLISECONDS);
+		}
 		this._logger.info("Init thread pool");
+	}
+
+	/**
+	 * Gets the active count.
+	 *
+	 * @return the active count
+	 */
+	public int getActiveCount() {
+		return this._pool.getActiveCount();
+	}
+
+	/**
+	 * Gets the completed task count.
+	 *
+	 * @return the completed task count
+	 */
+	public long getCompletedTaskCount() {
+		return this._pool.getCompletedTaskCount();
+	}
+
+	/**
+	 * Gets the task count.
+	 *
+	 * @return the task count
+	 */
+	public long getTaskCount() {
+		return this._pool.getTaskCount();
 	}
 
 	/**
 	 * Release pool.
 	 */
 	public void release() {
-		ThreadPoolFactory._pool.shutdown();
+		this._pool.shutdown();
 		int count = 0;
-		while (!ThreadPoolFactory._pool.isTerminated()) {
+		while (!this._pool.isTerminated()) {
 			count++;
 			if (count == 30) {
 				// Force shutdown after 30 seconds
-				ThreadPoolFactory._pool.shutdownNow();
+				this._pool.shutdownNow();
 			}
 			try {
 				Thread.sleep(1000);
@@ -103,7 +204,7 @@ public class ThreadPoolFactory {
 
 			}
 		}
-		ThreadPoolFactory._pool = null;
+		this._pool = null;
 		this._logger.info("Release thread pool");
 	}
 
@@ -113,7 +214,7 @@ public class ThreadPoolFactory {
 	 * @param runnable the runnable
 	 */
 	public void start(Runnable runnable) {
-		ThreadPoolFactory._pool.execute(runnable);
+		this._pool.execute(runnable);
 	}
 
 	/**
@@ -121,6 +222,7 @@ public class ThreadPoolFactory {
 	 *
 	 * @return single instance of ThreadFactory
 	 */
+	@Deprecated
 	public final static ThreadPoolFactory getInstance() {
 		return ThreadPoolFactory.instance;
 	}
