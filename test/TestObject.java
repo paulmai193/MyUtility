@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import logia.utility.json.JsonTool;
+import logia.utility.json.JsonUtil;
 import logia.utility.json.annotaion.JsonKey;
 
 import com.google.gson.JsonObject;
@@ -157,11 +157,11 @@ public class TestObject {
 		list.add("a");
 		list.add("b");
 		TestObject testObject = new TestObject(12, "Muoi hai", true, (float) 0.683, list, new Date());
-		JsonObject json = JsonTool.toJsonObject(testObject);
+		JsonObject json = JsonUtil.toJsonObject(testObject);
 		System.out.println(json);
 
 		// from json
-		testObject = JsonTool.fromJsonObject(json, TestObject.class);
-		System.out.println(JsonTool.toJsonObject(testObject));
+		testObject = JsonUtil.fromJsonObject(json, TestObject.class);
+		System.out.println(JsonUtil.toJsonObject(testObject));
 	}
 }

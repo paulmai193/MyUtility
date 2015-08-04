@@ -1,11 +1,13 @@
 package logia.utility.httpclient;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import java.util.Map.Entry;
+
+import org.apache.http.HttpHost;
+import org.apache.http.client.methods.HttpGet;
 
 /**
  * The Class HttpSendGet.
@@ -14,72 +16,68 @@ import java.util.concurrent.TimeoutException;
  */
 public class HttpSendGet extends HttpUtility {
 
+	/** The request params. */
+	private StringBuffer requestParams = new StringBuffer();
+
 	/**
-	 * Instantiates a new http send get.
+	 * Instantiates a new http send GET method.
 	 *
-	 * @param proxy the proxy
+	 * @param host the host
 	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
 	 * @param headers the headers
 	 * @param params the params
-	 * @param timeout the timeout
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public HttpSendGet(Proxy proxy, String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
-		super(requestURL, isUseCaches, headers, params, timeout);
-		URL url;
-		if (this.requestParams.length() > 0) {
-			url = new URL(requestURL + "?" + this.requestParams.toString());
-		}
-		else {
-			url = new URL(requestURL);
-		}
-		this.httpConn = (HttpURLConnection) url.openConnection(proxy);
-		this.httpConn.setConnectTimeout(timeout);
-		this.httpConn.setUseCaches(isUseCaches);
-		this.httpConn.setRequestMethod("GET");
-		this.httpConn.setDoInput(true); // true indicates the server returns response
-		this.httpConn.setDoOutput(false);// false indicates GET request
+	public HttpSendGet(HttpHost host, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
+		super(host, requestURL, headers, params);
+		this.setParameters();
+		this.httpRequest = new HttpGet(requestURL);
 		this.setHeaders();
+		if (this.requestParams.length() > 0) {
+			this.requestURL = (this.requestURL + "?" + this.requestParams.toString());
+		}
+
 	}
 
 	/**
-	 * Instantiates a new http send get.
+	 * Instantiates a new http send GET method.
 	 *
-	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
+	 * @param url the request url
 	 * @param headers the headers
 	 * @param params the params
-	 * @param timeout the connect timeout value in milliseconds
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public HttpSendGet(String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
-		super(requestURL, isUseCaches, headers, params, timeout);
-		URL url;
+	public HttpSendGet(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
+		super(url, headers, params);
+		this.setParameters();
 		if (this.requestParams.length() > 0) {
-			url = new URL(requestURL + "?" + this.requestParams.toString());
+			this.requestURL = (this.requestURL + "?" + this.requestParams.toString());
 		}
-		else {
-			url = new URL(requestURL);
-		}
-		this.httpConn = (HttpURLConnection) url.openConnection();
-		this.httpConn.setConnectTimeout(timeout);
-		this.httpConn.setUseCaches(isUseCaches);
-		this.httpConn.setRequestMethod("GET");
-		this.httpConn.setDoInput(true); // true indicates the server returns response
-		this.httpConn.setDoOutput(false);// false indicates GET request
+		this.httpRequest = new HttpGet(this.requestURL);
 		this.setHeaders();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see logia.utility.httpclient.HttpUtility#doSend()
+	 * @see logia.utility.httpclient.HttpUtility#setParameters()
 	 */
 	@Override
-	public int execute() throws IOException, TimeoutException {
-		return this.httpConn.getResponseCode();
+	protected void setParameters() {
+		for (Entry<String, String> param : this.params.entrySet()) {
+			String key = param.getKey();
+			String value = param.getValue();
+			try {
+				this.requestParams.append(URLEncoder.encode(key, "UTF-8"));
+				this.requestParams.append("=").append(URLEncoder.encode(value, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e) {
+				this.requestParams.append("=").append(value);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			this.requestParams.append("&");
+		}
 	}
 }

@@ -4,14 +4,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
+
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.log4j.Logger;
 
 /**
  * The Class HttpUtility.
@@ -20,69 +28,79 @@ import java.util.concurrent.TimeoutException;
  */
 public abstract class HttpUtility {
 
-	/** The set cookie key. */
-	private final String          SET_COOKIE_KEY = "Set-Cookie";
+	/** The Constant HEADER_CONTENT_TYPE. */
+	public static final String    HEADER_CONTENT_TYPE = "Content-Type";
 
-	/** The session cookie. */
-	protected String              SESSION_COOKIE = "JSESSIONID";
+	/** The Constant HEADER_COOKIE. */
+	public static final String    HEADER_COOKIE       = "Cookie";
 
-	/** The cookie key. */
-	public static final String    COOKIE_KEY     = "Cookie";
+	/** The Constant HEADER_USER_AGENT. */
+	public static final String    HEADER_USER_AGENT   = "User-Agent";
 
-	/** The content type. */
-	public static final String    CONTENT_TYPE   = "Content-Type";
-
-	/** The http conn. */
-	protected HttpURLConnection   httpConn;
-
-	/** The session. */
-	protected String              session;
-
-	/** The request url. */
-	protected String              requestURL;
-
-	/** The is use caches. */
-	protected boolean             isUseCaches;
+	/** The cookie store. */
+	private CookieStore           cookieStore;
 
 	/** The headers. */
 	protected Map<String, String> headers;
 
+	/** The http client. */
+	protected HttpClient          httpClient;
+
+	/** The http context. */
+	protected HttpClientContext   httpContext;
+
+	/** The http host. */
+	protected HttpHost            httpHost;
+
+	/** The http request. */
+	protected HttpRequest         httpRequest;
+
+	/** The http response. */
+	protected HttpResponse        httpResponse;
+
+	/** The logger. */
+	protected final Logger        LOGGER              = Logger.getLogger(getClass());
+
 	/** The params. */
 	protected Map<String, String> params;
 
-	/** The request params. */
-	protected StringBuffer        requestParams  = new StringBuffer();
+	/** The request url. */
+	protected String              requestURL;
 
-	/** The timeout. */
-	protected int                 timeout;
+	/**
+	 * Instantiates a new http utility.
+	 *
+	 * @param httpHost the host
+	 * @param requestURL the request url
+	 * @param headers the headers
+	 * @param params the params
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public HttpUtility(HttpHost httpHost, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
+		this.httpHost = httpHost;
+		this.requestURL = requestURL;
+		this.headers = headers;
+		this.params = params;
+
+		this.httpContext = HttpClientContext.create();
+		this.httpClient = HttpClientBuilder.create().build();
+	}
 
 	/**
 	 * Instantiates a new http utility.
 	 *
 	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
 	 * @param headers the headers
 	 * @param params the params
-	 * @param timeout the timeout
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public HttpUtility(String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
+	public HttpUtility(String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		this.requestURL = requestURL;
-		this.isUseCaches = isUseCaches;
 		this.headers = headers;
 		this.params = params;
-		this.timeout = timeout;
-		this.setParameters();
-	}
 
-	/**
-	 * Disconnect.
-	 */
-	public void disconnect() {
-		if (this.httpConn != null) {
-			this.httpConn.disconnect();
-		}
+		this.httpContext = HttpClientContext.create();
+		this.httpClient = HttpClientBuilder.create().build();
 	}
 
 	/**
@@ -92,17 +110,24 @@ public abstract class HttpUtility {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws TimeoutException the timeout exception
 	 */
-	public abstract int execute() throws IOException, TimeoutException;
+	public int execute() throws IOException, TimeoutException {
+		if (httpHost != null) {
+			this.httpResponse = httpClient.execute(httpHost, httpRequest, httpContext);
+		}
+		else {
+			this.httpResponse = httpClient.execute((HttpUriRequest) httpRequest, httpContext);
+		}
+		this.cookieStore = httpContext.getCookieStore();
+		return this.httpResponse.getStatusLine().getStatusCode();
+	}
 
 	/**
 	 * Gets the cookies.
 	 *
 	 * @return the cookies
 	 */
-	public List<String> getCookies() {
-		Map<String, List<String>> headerMaps = this.httpConn.getHeaderFields();
-		List<String> cookies = headerMaps.get(this.SET_COOKIE_KEY);
-		return cookies;
+	public List<Cookie> getListCookies() {
+		return cookieStore.getCookies();
 	}
 
 	/**
@@ -113,82 +138,68 @@ public abstract class HttpUtility {
 	 */
 	public String getResponseContent() throws IOException {
 		InputStream inputStream = null;
-		StringBuffer jb = new StringBuffer();
-		if (this.httpConn != null) {
-			try {
-				inputStream = this.httpConn.getInputStream();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		StringBuffer buffer = new StringBuffer();
+		if (this.httpClient != null) {
+			inputStream = this.httpResponse.getEntity().getContent();
 		}
 		else {
 			throw new IOException("Connection is not established.");
 		}
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));) {
 			ArrayList<String> response = new ArrayList<String>();
 			String line = "";
 			while ((line = reader.readLine()) != null) {
-				jb.append(line);
+				buffer.append(line);
 				response.add(line);
 			}
-			reader.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return jb.toString();
+		return buffer.toString();
 	}
 
 	/**
-	 * Gets the session id.
+	 * Sets the cookie.
 	 *
-	 * @return the session id
+	 * @param cookie the new cookie
 	 */
-	public String getSessionId() {
-		String sessionId = null;
-		for (String cookie : this.getCookies()) {
-			if (cookie.toLowerCase().contains("sessionid")) {
-				String[] arr = cookie.split(";");
-				for (String element : arr) {
-					if (element.toLowerCase().contains("sessionid")) {
-						sessionId = element;
-					}
-				}
-			}
+	public void setCookie(Cookie cookie) {
+		this.cookieStore.addCookie(cookie);
+		this.httpContext.setCookieStore(cookieStore);
+	}
+
+	/**
+	 * Sets the cookies.
+	 *
+	 * @param cookies the new cookies
+	 */
+	public void setCookies(List<Cookie> cookies) {
+		for (Cookie cookie : cookies) {
+			setCookie(cookie);
 		}
-		return sessionId;
+	}
+
+	/**
+	 * Sets the http context.
+	 *
+	 * @param httpContext the httpContext to set
+	 */
+	public void setHttpContext(HttpClientContext httpContext) {
+		this.httpContext = httpContext;
 	}
 
 	/**
 	 * Sets the headers.
 	 */
 	protected void setHeaders() {
-		for (String key : this.headers.keySet()) {
-			this.httpConn.setRequestProperty(key, this.headers.get(key));
+		for (Entry<String, String> header : this.headers.entrySet()) {
+			this.httpRequest.setHeader(header.getKey(), header.getValue());
 		}
 	}
 
 	/**
-	 * Sets the parameters, encode them using URLEncoder
+	 * Sets the parameters, encode them using URLEncoder.
 	 */
-	protected void setParameters() {
-		Iterator<String> paramIterator = this.params.keySet().iterator();
-		while (paramIterator.hasNext()) {
-			String key = paramIterator.next();
-			String value = this.params.get(key);
-			try {
-				this.requestParams.append(URLEncoder.encode(key, "UTF-8"));
-				this.requestParams.append("=").append(URLEncoder.encode(value, "UTF-8"));
-			}
-			catch (UnsupportedEncodingException e) {
-				this.requestParams.append("=").append(value);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			this.requestParams.append("&");
-		}
-	}
+	protected abstract void setParameters();
 }

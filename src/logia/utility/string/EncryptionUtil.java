@@ -16,7 +16,7 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * The Class EncryptionUtils.
  */
-public class EncryptionUtils {
+public class EncryptionUtil {
 
 	/** The Random Constant SALT. */
 	private static final byte[] SALT            = { (byte) 0x21, (byte) 0x21, (byte) 0xF0, (byte) 0x55, (byte) 0xC3, (byte) 0x9F, (byte) 0x5A,
@@ -28,7 +28,7 @@ public class EncryptionUtils {
 	/**
 	 * Instantiates a new encryption utils.
 	 */
-	private EncryptionUtils() {
+	private EncryptionUtil() {
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class EncryptionUtils {
 
 			byte[] dec = Base64.decodeBase64(input.getBytes());
 
-			KeySpec keySpec = new PBEKeySpec(password.toCharArray(), EncryptionUtils.SALT, EncryptionUtils.ITERATION_COUNT);
-			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(EncryptionUtils.SALT, EncryptionUtils.ITERATION_COUNT);
+			KeySpec keySpec = new PBEKeySpec(password.toCharArray(), EncryptionUtil.SALT, EncryptionUtil.ITERATION_COUNT);
+			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(EncryptionUtil.SALT, EncryptionUtil.ITERATION_COUNT);
 
 			SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
 
@@ -80,8 +80,8 @@ public class EncryptionUtils {
 		}
 		try {
 
-			KeySpec keySpec = new PBEKeySpec(password.toCharArray(), EncryptionUtils.SALT, EncryptionUtils.ITERATION_COUNT);
-			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(EncryptionUtils.SALT, EncryptionUtils.ITERATION_COUNT);
+			KeySpec keySpec = new PBEKeySpec(password.toCharArray(), EncryptionUtil.SALT, EncryptionUtil.ITERATION_COUNT);
+			AlgorithmParameterSpec paramSpec = new PBEParameterSpec(EncryptionUtil.SALT, EncryptionUtil.ITERATION_COUNT);
 
 			SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
 

@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * The Class StringProcess.
  */
-public class StringUtils {
+public class StringUtil {
 
 	/** The Constant SPECIAL_CHARACTERS. */
 	private static final char[] SPECIAL_CHARACTERS = { 'À', 'Á', 'Â', 'Ã', 'È', 'É', 'Ê', 'Ì', 'Í', 'Ò', 'Ó', 'Ô', 'Õ', 'Ù', 'Ú', 'Ý', 'à', 'á', 'â',
@@ -32,12 +32,12 @@ public class StringUtils {
 	 * @return the character
 	 */
 	public static char convertNumToChar(long number) {
-		if (number >= StringUtils.ALPHABET.length) {
-			number = number / StringUtils.ALPHABET.length - 1;
-			return StringUtils.convertNumToChar(number);
+		if (number >= StringUtil.ALPHABET.length) {
+			number = number / StringUtil.ALPHABET.length - 1;
+			return StringUtil.convertNumToChar(number);
 		}
 		else {
-			return StringUtils.ALPHABET[(int) number];
+			return StringUtil.ALPHABET[(int) number];
 		}
 	}
 
@@ -50,7 +50,7 @@ public class StringUtils {
 	public static String removeAccent(String s) {
 		StringBuilder sb = new StringBuilder(s);
 		for (int i = 0; i < sb.length(); i++) {
-			sb.setCharAt(i, StringUtils.removeAccent(sb.charAt(i)));
+			sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
 		}
 		return sb.toString();
 	}
@@ -64,7 +64,7 @@ public class StringUtils {
 	public static String removeAccentLowerCase(String s) {
 		StringBuilder sb = new StringBuilder(s);
 		for (int i = 0; i < sb.length(); i++) {
-			sb.setCharAt(i, StringUtils.removeAccent(sb.charAt(i)));
+			sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
 		}
 		return sb.toString().toLowerCase();
 	}
@@ -76,9 +76,9 @@ public class StringUtils {
 	 * @return the char
 	 */
 	private static char removeAccent(char ch) {
-		int index = Arrays.binarySearch(StringUtils.SPECIAL_CHARACTERS, ch);
+		int index = Arrays.binarySearch(StringUtil.SPECIAL_CHARACTERS, ch);
 		if (index >= 0) {
-			ch = StringUtils.REPLACEMENTS[index];
+			ch = StringUtil.REPLACEMENTS[index];
 		}
 		return ch;
 	}

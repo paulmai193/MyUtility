@@ -1,12 +1,18 @@
 package logia.utility.httpclient;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import java.util.Map.Entry;
+
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpHost;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.message.BasicNameValuePair;
 
 /**
  * The Class HttpSendPut.
@@ -18,63 +24,51 @@ public class HttpSendPut extends HttpUtility {
 	/**
 	 * Instantiates a new http send put.
 	 *
-	 * @param proxy the proxy
+	 * @param host the host
 	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
 	 * @param headers the headers
 	 * @param params the params
-	 * @param timeout the timeout
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public HttpSendPut(Proxy proxy, String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
-		super(requestURL, isUseCaches, headers, params, timeout);
-		URL url = new URL(requestURL);
-		this.httpConn = (HttpURLConnection) url.openConnection(proxy);
-		this.httpConn.setConnectTimeout(timeout);
-		this.httpConn.setUseCaches(isUseCaches);
-		this.httpConn.setRequestMethod("PUT");
-		this.httpConn.setDoInput(true); // true indicates the server returns response
-		this.httpConn.setDoOutput(true); // true indicates POST request
-		this.setHeaders();
+	public HttpSendPut(HttpHost host, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
+		super(host, requestURL, headers, params);
+		httpRequest = new HttpPut(requestURL);
+		setHeaders();
+		setParameters();
 	}
 
 	/**
 	 * Instantiates a new http send put.
 	 *
 	 * @param requestURL the request url
-	 * @param isUseCaches the is use caches
 	 * @param headers the headers
 	 * @param params the params
-	 * @param timeout the connect timeout value in milliseconds
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public HttpSendPut(String requestURL, boolean isUseCaches, Map<String, String> headers, Map<String, String> params, int timeout)
-			throws IOException {
-		super(requestURL, isUseCaches, headers, params, timeout);
-		URL url = new URL(requestURL);
-		this.httpConn = (HttpURLConnection) url.openConnection();
-		this.httpConn.setConnectTimeout(timeout);
-		this.httpConn.setUseCaches(isUseCaches);
-		this.httpConn.setRequestMethod("PUT");
-		this.httpConn.setDoInput(true); // true indicates the server returns response
-		this.httpConn.setDoOutput(true); // true indicates POST request
-		this.setHeaders();
+	public HttpSendPut(String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
+		super(requestURL, headers, params);
+		httpRequest = new HttpPut(requestURL);
+		setHeaders();
+		setParameters();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see logia.utility.httpclient.HttpUtility#doSend()
+	 * @see logia.utility.httpclient.HttpUtility#setParameters()
 	 */
 	@Override
-	public int execute() throws IOException, TimeoutException {
-		if (this.params != null && this.params.size() > 0) {
-			OutputStreamWriter writer = new OutputStreamWriter(this.httpConn.getOutputStream());
-			writer.write(this.requestParams.toString());
-			writer.flush();
+	protected void setParameters() {
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		for (Entry<String, String> param : this.params.entrySet()) {
+			urlParameters.add(new BasicNameValuePair(param.getKey(), param.getValue()));
 		}
-		return this.httpConn.getResponseCode();
+		try {
+			((HttpEntityEnclosingRequest) httpRequest).setEntity(new UrlEncodedFormEntity(urlParameters));
+		}
+		catch (UnsupportedEncodingException e) {
+			LOGGER.error(e);
+		}
 	}
 
 }

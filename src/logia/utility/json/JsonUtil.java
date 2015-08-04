@@ -22,7 +22,7 @@ import com.google.gson.JsonPrimitive;
  * 
  * @author Paul Mai
  */
-public class JsonTool {
+public class JsonUtil {
 
 	/**
 	 * From json array.
@@ -66,7 +66,7 @@ public class JsonTool {
 				}
 			}
 			else if (element instanceof JsonObject) {
-				list.add(JsonTool.fromJsonObject((JsonObject) element, clazz));
+				list.add(JsonUtil.fromJsonObject((JsonObject) element, clazz));
 			}
 		}
 		return list;
@@ -81,7 +81,7 @@ public class JsonTool {
 	 * @return the t
 	 */
 	public static <T> T fromJsonObject(JsonObject jsonObject, Class<T> clazz) {
-		if (JsonTool.isJsonObject(clazz)) {
+		if (JsonUtil.isJsonObject(clazz)) {
 			try {
 				T object = clazz.newInstance();
 
@@ -125,12 +125,12 @@ public class JsonTool {
 								}
 							}
 							else if (value instanceof JsonObject) {
-								field.set(object, JsonTool.fromJsonObject((JsonObject) value, type));
+								field.set(object, JsonUtil.fromJsonObject((JsonObject) value, type));
 							}
 							else if (value instanceof JsonArray && field.getGenericType() instanceof ParameterizedType) {
 								ParameterizedType pt = (ParameterizedType) field.getGenericType();
 								String valueClassName = pt.getActualTypeArguments()[0].toString();
-								field.set(object, JsonTool.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
+								field.set(object, JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
 							}
 						}
 						catch (IllegalArgumentException | ClassNotFoundException e) {
@@ -180,13 +180,13 @@ public class JsonTool {
 									}
 								}
 								else if (value instanceof JsonObject) {
-									method.invoke(object, JsonTool.fromJsonObject((JsonObject) value, type));
+									method.invoke(object, JsonUtil.fromJsonObject((JsonObject) value, type));
 								}
 								else if (value instanceof JsonArray && method.getGenericReturnType() instanceof ParameterizedType) {
 									ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
 									String valueClassName = pt.getActualTypeArguments()[0].toString();
 									method.invoke(object,
-											JsonTool.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
+											JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
 								}
 							}
 							catch (IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
@@ -251,8 +251,8 @@ public class JsonTool {
 			else if (object instanceof JsonElement) {
 				jsonArray.add((JsonElement) object);
 			}
-			else if (JsonTool.isJsonObject(object.getClass())) {
-				jsonArray.add(JsonTool.toJsonObject(object));
+			else if (JsonUtil.isJsonObject(object.getClass())) {
+				jsonArray.add(JsonUtil.toJsonObject(object));
 			}
 		}
 		return jsonArray;
@@ -266,7 +266,7 @@ public class JsonTool {
 	 */
 	public static JsonObject toJsonObject(Object object) {
 		Class<?> clazz = object.getClass();
-		if (JsonTool.isJsonObject(clazz)) {
+		if (JsonUtil.isJsonObject(clazz)) {
 			JsonObject jsonObject = new JsonObject();
 
 			// Iterate fields with JsonKey annotation
@@ -298,10 +298,10 @@ public class JsonTool {
 							jsonObject.add(key.key(), (JsonElement) value);
 						}
 						else if (value instanceof List<?>) {
-							jsonObject.add(key.key(), JsonTool.toJsonArray(((List<?>) value).toArray()));
+							jsonObject.add(key.key(), JsonUtil.toJsonArray(((List<?>) value).toArray()));
 						}
-						else if (JsonTool.isJsonObject(value.getClass())) {
-							jsonObject.add(key.key(), JsonTool.toJsonObject(value));
+						else if (JsonUtil.isJsonObject(value.getClass())) {
+							jsonObject.add(key.key(), JsonUtil.toJsonObject(value));
 						}
 						else {
 							jsonObject.addProperty(key.key(), value.toString());
@@ -341,10 +341,10 @@ public class JsonTool {
 								jsonObject.add(key.key(), (JsonElement) value);
 							}
 							else if (value instanceof List<?>) {
-								jsonObject.add(key.key(), JsonTool.toJsonArray(((List<?>) value).toArray()));
+								jsonObject.add(key.key(), JsonUtil.toJsonArray(((List<?>) value).toArray()));
 							}
-							else if (JsonTool.isJsonObject(value.getClass())) {
-								jsonObject.add(key.key(), JsonTool.toJsonObject(value));
+							else if (JsonUtil.isJsonObject(value.getClass())) {
+								jsonObject.add(key.key(), JsonUtil.toJsonObject(value));
 							}
 							else {
 								jsonObject.addProperty(key.key(), value.toString());
