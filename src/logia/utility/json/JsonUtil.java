@@ -138,7 +138,7 @@ public final class JsonUtil {
 							}
 						}
 						catch (IllegalArgumentException | ClassNotFoundException e) {
-							LOGGER.error(e.getMessage(), e);
+							JsonUtil.LOGGER.error(e.getMessage(), e);
 							return null;
 						}
 					}
@@ -190,11 +190,11 @@ public final class JsonUtil {
 									ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
 									String valueClassName = pt.getActualTypeArguments()[0].toString();
 									method.invoke(object,
-									        JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
+											JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
 								}
 							}
 							catch (IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
-								LOGGER.error(e.getMessage(), e);
+								JsonUtil.LOGGER.error(e.getMessage(), e);
 							}
 						}
 					}
@@ -202,7 +202,7 @@ public final class JsonUtil {
 				return object;
 			}
 			catch (InstantiationException | IllegalAccessException e) {
-				LOGGER.error(e.getMessage(), e);
+				JsonUtil.LOGGER.error(e.getMessage(), e);
 				return null;
 			}
 		}
@@ -312,7 +312,7 @@ public final class JsonUtil {
 						}
 					}
 					catch (IllegalArgumentException | IllegalAccessException e) {
-						LOGGER.error(e.getMessage(), e);
+						JsonUtil.LOGGER.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -355,7 +355,7 @@ public final class JsonUtil {
 							}
 						}
 						catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							LOGGER.error(e.getMessage(), e);
+							JsonUtil.LOGGER.error(e.getMessage(), e);
 						}
 					}
 				}

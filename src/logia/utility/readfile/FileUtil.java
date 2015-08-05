@@ -66,10 +66,10 @@ public class FileUtil {
 			}
 		}
 		catch (FileNotFoundException e) {
-			LOGGER.error(e.getMessage(), e);
+			FileUtil.LOGGER.error(e.getMessage(), e);
 		}
 		catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
+			FileUtil.LOGGER.error(e.getMessage(), e);
 		}
 	}
 

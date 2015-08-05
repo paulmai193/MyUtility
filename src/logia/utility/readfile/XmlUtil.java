@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 public class XmlUtil {
 
 	/** The logger. */
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = Logger.getLogger(this.getClass());
 
 	/** The xml file path. */
 	String               xmlFilePath;
@@ -88,7 +88,7 @@ public class XmlUtil {
 			root = doc.getDocumentElement();
 		}
 		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 		}
 		return root;
 	}

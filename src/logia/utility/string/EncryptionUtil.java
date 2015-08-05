@@ -24,7 +24,7 @@ public class EncryptionUtil {
 
 	/** The Random Constant SALT. */
 	private static final byte[] SALT            = { (byte) 0x21, (byte) 0x21, (byte) 0xF0, (byte) 0x55, (byte) 0xC3, (byte) 0x9F, (byte) 0x5A,
-	        (byte) 0x75                        };
+		(byte) 0x75                        };
 
 	/** The Constant ITERATION_COUNT. */
 	private final static int    ITERATION_COUNT = 31;
@@ -66,7 +66,7 @@ public class EncryptionUtil {
 
 		}
 		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+			EncryptionUtil.LOGGER.error(e.getMessage(), e);
 		}
 
 		return null;
@@ -102,7 +102,7 @@ public class EncryptionUtil {
 
 		}
 		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+			EncryptionUtil.LOGGER.error(e.getMessage(), e);
 		}
 
 		return null;
@@ -135,7 +135,7 @@ public class EncryptionUtil {
 
 		}
 		catch (NoSuchAlgorithmException e) {
-			LOGGER.error(e.getMessage(), e);
+			EncryptionUtil.LOGGER.error(e.getMessage(), e);
 		}
 
 		return null;

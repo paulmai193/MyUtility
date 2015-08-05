@@ -40,7 +40,7 @@ public final class ApplePush {
 		this.alertProps.load(new InputStreamReader(url.openStream(), "UTF-8"));
 
 		this.setConfig(this.alertProps.getProperty("apple.host"), this.alertProps.getProperty("apple.keypath"),
-		        this.alertProps.getProperty("apple.password"), Integer.parseInt(this.alertProps.getProperty("apple.port")));
+				this.alertProps.getProperty("apple.password"), Integer.parseInt(this.alertProps.getProperty("apple.port")));
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class ClassUtil {
 			}
 		}
 		catch (NoSuchMethodException | SecurityException e) {
-			LOGGER.error(e.getMessage(), e);
+			ClassUtil.LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -66,7 +66,7 @@ public class ClassUtil {
 			}
 		}
 		catch (NoSuchMethodException | SecurityException e) {
-			LOGGER.error(e.getMessage(), e);
+			ClassUtil.LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
