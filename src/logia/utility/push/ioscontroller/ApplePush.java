@@ -22,7 +22,7 @@ import com.notnoop.apns.PayloadBuilder;
 public final class ApplePush {
 
 	/** The logger. */
-	private final Logger LOGGER     = Logger.getLogger(getClass());
+	private final Logger LOGGER     = Logger.getLogger(this.getClass());
 
 	/** The service. */
 	private ApnsService  service;
@@ -39,8 +39,8 @@ public final class ApplePush {
 		URL url = this.getClass().getClassLoader().getResource("notification.properties");
 		this.alertProps.load(new InputStreamReader(url.openStream(), "UTF-8"));
 
-		this.setConfig(alertProps.getProperty("apple.host"), alertProps.getProperty("apple.keypath"), alertProps.getProperty("apple.password"),
-		        Integer.parseInt(alertProps.getProperty("apple.port")));
+		this.setConfig(this.alertProps.getProperty("apple.host"), this.alertProps.getProperty("apple.keypath"),
+		        this.alertProps.getProperty("apple.password"), Integer.parseInt(this.alertProps.getProperty("apple.port")));
 	}
 
 	/**
@@ -77,7 +77,7 @@ public final class ApplePush {
 				length = payload.getBytes("UTF-8").length;
 			}
 			this.LOGGER.debug("payload's value: " + payload);
-			service.push(IdPush, payload);
+			this.service.push(IdPush, payload);
 		}
 		catch (Exception e) {
 			this.LOGGER.error(e.getMessage(), e);
@@ -96,6 +96,6 @@ public final class ApplePush {
 	 * @throws Exception the exception
 	 */
 	public void setConfig(String host, String certKeyPath, String password, int port) throws Exception {
-		service = APNS.newService().withCert(certKeyPath, password).withGatewayDestination(host, port).build();
+		this.service = APNS.newService().withCert(certKeyPath, password).withGatewayDestination(host, port).build();
 	}
 }

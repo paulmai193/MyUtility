@@ -25,6 +25,6 @@ public interface PushManager {
 	 * @param deviceName
 	 * @return String
 	 */
-	public boolean sentMessage(String pushString, String message, String deviceName, String screen, Map<String, String> param, boolean show);
+	public boolean sendMessage(String pushString, String message, String deviceName, String screen, Map<String, String> param, boolean show);
 
 }

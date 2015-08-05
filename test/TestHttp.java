@@ -15,7 +15,7 @@ public class TestHttp {
 		paramsFile.put("thumb", new File("D:/OneDrive/Music/Vietnamese/100PhanTram-HungCuong_k5e7.mp3"));
 
 		HttpSendPostMultipart post = new HttpSendPostMultipart("http://192.168.1.4:8080/nowktv/studio/uploadrawvideo", new HashMap<String, String>(),
-		        paramsText, paramsFile);
+				paramsText, paramsFile);
 		System.out.println(post.execute());
 		System.out.println(post.getResponseContent());
 	}

@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 /**
  * The Class FileUtil.
@@ -23,6 +24,14 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileUtil {
 
+	private static final Logger LOGGER = Logger.getLogger(FileUtil.class);
+
+	/**
+	 * Copy directory.
+	 *
+	 * @param sourceLocation the source location
+	 * @param targetLocation the target location
+	 */
 	public static void copyDirectory(File sourceLocation, File targetLocation) {
 		try {
 			if (sourceLocation.exists()) {
@@ -57,10 +66,10 @@ public class FileUtil {
 			}
 		}
 		catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 

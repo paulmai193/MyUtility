@@ -32,9 +32,9 @@ public class HttpSendPut extends HttpUtility {
 	 */
 	public HttpSendPut(HttpHost host, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		super(host, requestURL, headers, params);
-		httpRequest = new HttpPut(requestURL);
-		setHeaders();
-		setParameters();
+		this.httpRequest = new HttpPut(requestURL);
+		this.setHeaders();
+		this.setParameters();
 	}
 
 	/**
@@ -47,9 +47,9 @@ public class HttpSendPut extends HttpUtility {
 	 */
 	public HttpSendPut(String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		super(requestURL, headers, params);
-		httpRequest = new HttpPut(requestURL);
-		setHeaders();
-		setParameters();
+		this.httpRequest = new HttpPut(requestURL);
+		this.setHeaders();
+		this.setParameters();
 	}
 
 	/*
@@ -64,10 +64,10 @@ public class HttpSendPut extends HttpUtility {
 			urlParameters.add(new BasicNameValuePair(param.getKey(), param.getValue()));
 		}
 		try {
-			((HttpEntityEnclosingRequest) httpRequest).setEntity(new UrlEncodedFormEntity(urlParameters));
+			((HttpEntityEnclosingRequest) this.httpRequest).setEntity(new UrlEncodedFormEntity(urlParameters));
 		}
 		catch (UnsupportedEncodingException e) {
-			LOGGER.error(e);
+			this.LOGGER.error(e);
 		}
 	}
 

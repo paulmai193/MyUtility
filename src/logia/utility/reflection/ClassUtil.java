@@ -3,8 +3,24 @@ package logia.utility.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
+
+/**
+ * The Class ClassUtil.
+ * 
+ * @author Paul Mai
+ */
 public class ClassUtil {
 
+	private static final Logger LOGGER = Logger.getLogger(ClassUtil.class);
+
+	/**
+	 * Find getter.
+	 *
+	 * @param clazz the clazz
+	 * @param field the field
+	 * @return the method
+	 */
 	public static Method findGetter(Class<?> clazz, Field field) {
 		String fieldName = field.getName();
 		String methodName;
@@ -25,11 +41,18 @@ public class ClassUtil {
 			}
 		}
 		catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
 
+	/**
+	 * Find setter.
+	 *
+	 * @param clazz the clazz
+	 * @param field the field
+	 * @return the method
+	 */
 	public static Method findSetter(Class<?> clazz, Field field) {
 		String fieldName = field.getName();
 		String methodName = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
@@ -43,7 +66,7 @@ public class ClassUtil {
 			}
 		}
 		catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}

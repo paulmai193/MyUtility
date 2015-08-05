@@ -58,14 +58,14 @@ public class ThreadPoolFactory {
 	private ThreadPoolExecutor             _pool;
 
 	/** The logger. */
-	private Logger                         _logger  = Logger.getLogger(ThreadPoolFactory.class.getName());
+	private final Logger                   LOGGER   = Logger.getLogger(ThreadPoolFactory.class.getName());
 
 	/**
 	 * Instantiates a new thread pool factory with default 1 thread in pool.
 	 */
 	public ThreadPoolFactory() {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1, new MyThreadFactory());
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class ThreadPoolFactory {
 	 */
 	public ThreadPoolFactory(int nThreads) {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory());
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ThreadPoolFactory {
 	 */
 	public ThreadPoolFactory(int nThreads, int threadPriority) {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory(threadPriority));
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -104,7 +104,17 @@ public class ThreadPoolFactory {
 		if (!isCached) {
 			this._pool.setKeepAliveTime(0, TimeUnit.MILLISECONDS);
 		}
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
+	}
+
+	/**
+	 * Gets the single instance of ThreadFactory.
+	 *
+	 * @return single instance of ThreadFactory
+	 */
+	@Deprecated
+	public final static ThreadPoolFactory getInstance() {
+		return ThreadPoolFactory.instance;
 	}
 
 	/**
@@ -113,7 +123,7 @@ public class ThreadPoolFactory {
 	@Deprecated
 	public void connect() {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1, new MyThreadFactory());
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -124,7 +134,7 @@ public class ThreadPoolFactory {
 	@Deprecated
 	public void connect(int nThreads) {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory());
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -136,7 +146,7 @@ public class ThreadPoolFactory {
 	@Deprecated
 	public void connect(int nThreads, int threadPriority) {
 		this._pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads, new MyThreadFactory(threadPriority));
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -155,7 +165,7 @@ public class ThreadPoolFactory {
 		if (!isCached) {
 			this._pool.setKeepAliveTime(0, TimeUnit.MILLISECONDS);
 		}
-		this._logger.info("Init thread pool");
+		this.LOGGER.info("Init thread pool");
 	}
 
 	/**
@@ -205,7 +215,7 @@ public class ThreadPoolFactory {
 			}
 		}
 		this._pool = null;
-		this._logger.info("Release thread pool");
+		this.LOGGER.info("Release thread pool");
 	}
 
 	/**
@@ -215,15 +225,5 @@ public class ThreadPoolFactory {
 	 */
 	public void start(Runnable runnable) {
 		this._pool.execute(runnable);
-	}
-
-	/**
-	 * Gets the single instance of ThreadFactory.
-	 *
-	 * @return single instance of ThreadFactory
-	 */
-	@Deprecated
-	public final static ThreadPoolFactory getInstance() {
-		return ThreadPoolFactory.instance;
 	}
 }

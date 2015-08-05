@@ -10,23 +10,6 @@ public class PushNotificationMessage {
 
 	private Logger _logger = Logger.getLogger(PushNotificationMessage.class.getName());
 
-	public boolean sendPushNotificationAndroid(String IdPush, String pushMsg) {
-		boolean gcmsend = true;
-		try {
-
-			PushManager gcm = PushManagerFactory.getInstance();
-			Map<String, String> pushParam = new HashMap<String, String>();
-			pushParam.put("Message", "This");
-			gcmsend = gcm.sentMessage(IdPush, pushMsg, "Android", "View", pushParam, true);
-
-		}
-		catch (Exception ex) {
-			this._logger.error(ex.getMessage(), ex);
-			gcmsend = false;
-		}
-		return gcmsend;
-	}
-
 	public static String RandomStringGenerator(int totchar) {
 		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		Random rnd = new Random();
@@ -35,6 +18,23 @@ public class PushNotificationMessage {
 			sb.append(AB.charAt(rnd.nextInt(AB.length())));
 		}
 		return sb.toString();
+	}
+
+	public boolean sendPushNotificationAndroid(String IdPush, String pushMsg) {
+		boolean gcmsend = true;
+		try {
+
+			PushManager gcm = PushManagerFactory.getInstance();
+			Map<String, String> pushParam = new HashMap<String, String>();
+			pushParam.put("Message", "This");
+			gcmsend = gcm.sendMessage(IdPush, pushMsg, "Android", "View", pushParam, true);
+
+		}
+		catch (Exception ex) {
+			this._logger.error(ex.getMessage(), ex);
+			gcmsend = false;
+		}
+		return gcmsend;
 	}
 
 }

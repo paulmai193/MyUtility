@@ -34,7 +34,7 @@ public class HttpSendGet extends HttpUtility {
 		this.httpRequest = new HttpGet(requestURL);
 		this.setHeaders();
 		if (this.requestParams.length() > 0) {
-			this.requestURL = (this.requestURL + "?" + this.requestParams.toString());
+			this.requestURL = this.requestURL + "?" + this.requestParams.toString();
 		}
 
 	}
@@ -51,7 +51,7 @@ public class HttpSendGet extends HttpUtility {
 		super(url, headers, params);
 		this.setParameters();
 		if (this.requestParams.length() > 0) {
-			this.requestURL = (this.requestURL + "?" + this.requestParams.toString());
+			this.requestURL = this.requestURL + "?" + this.requestParams.toString();
 		}
 		this.httpRequest = new HttpGet(this.requestURL);
 		this.setHeaders();

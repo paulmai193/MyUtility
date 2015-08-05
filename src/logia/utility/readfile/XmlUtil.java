@@ -3,6 +3,7 @@ package logia.utility.readfile;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,8 +16,11 @@ import org.w3c.dom.NodeList;
  */
 public class XmlUtil {
 
+	/** The logger. */
+	private final Logger LOGGER = Logger.getLogger(getClass());
+
 	/** The xml file path. */
-	String xmlFilePath;
+	String               xmlFilePath;
 
 	/**
 	 * Instantiates a new xml ultility.
@@ -84,7 +88,7 @@ public class XmlUtil {
 			root = doc.getDocumentElement();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return root;
 	}

@@ -22,7 +22,7 @@ import com.google.android.gcm.server.Sender;
 public class AndroidGcmManager implements PushManager {
 
 	/** The logger. */
-	private final Logger LOGGER     = Logger.getLogger(getClass());
+	private final Logger LOGGER     = Logger.getLogger(this.getClass());
 
 	/** The sender. */
 	private Sender       sender;
@@ -39,7 +39,7 @@ public class AndroidGcmManager implements PushManager {
 		URL url = this.getClass().getClassLoader().getResource("notification.properties");
 		this.alertProps.load(new InputStreamReader(url.openStream(), "UTF-8"));
 
-		this.sender = new Sender(alertProps.getProperty("android.apikey"));
+		this.sender = new Sender(this.alertProps.getProperty("android.apikey"));
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class AndroidGcmManager implements PushManager {
 	 * @return true, if successful
 	 */
 	@Override
-	public boolean sentMessage(String pushString, String message, String deviceName, String screen, Map<String, String> param, boolean show) {
+	public boolean sendMessage(String pushString, String message, String deviceName, String screen, Map<String, String> param, boolean show) {
 		boolean responseString = true;
 		if (this.sender != null) {
 			try {
@@ -76,7 +76,7 @@ public class AndroidGcmManager implements PushManager {
 				for (String key : param.keySet()) {
 					builder.addData(key, param.get(key));
 				}
-				builder.addData(alertProps.getProperty("android.messagekey"), message);
+				builder.addData(this.alertProps.getProperty("android.messagekey"), message);
 				builder.collapseKey(PushNotificationMessage.RandomStringGenerator(9));
 				Message gcmMessage = builder.build();
 				Result result = this.sender.send(gcmMessage, pushString, 5);
@@ -84,19 +84,19 @@ public class AndroidGcmManager implements PushManager {
 					if (result.getMessageId() != null) {
 						String canonicalRegId = result.getCanonicalRegistrationId();
 						if (canonicalRegId != null) {
-							LOGGER.info("Canonical Registration: " + canonicalRegId);
+							this.LOGGER.info("Canonical Registration: " + canonicalRegId);
 						}
 					}
 					else {
 						String error = result.getErrorCodeName();
 						if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-							LOGGER.info("Error Code Name: " + result.getErrorCodeName());
+							this.LOGGER.info("Error Code Name: " + result.getErrorCodeName());
 						}
 					}
 				}
 			}
 			catch (IOException e) {
-				LOGGER.error(e.getMessage(), e);
+				this.LOGGER.error(e.getMessage(), e);
 				responseString = false;
 			}
 		}

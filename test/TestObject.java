@@ -62,6 +62,20 @@ public class TestObject {
 		this.time = t;
 	}
 
+	public static void main(String[] args) {
+		// tojson
+		List<String> list = new ArrayList<String>();
+		list.add("a");
+		list.add("b");
+		TestObject testObject = new TestObject(12, "Muoi hai", true, (float) 0.683, list, new Date());
+		JsonObject json = JsonUtil.toJsonObject(testObject);
+		System.out.println(json);
+
+		// from json
+		testObject = JsonUtil.fromJsonObject(json, TestObject.class);
+		System.out.println(JsonUtil.toJsonObject(testObject));
+	}
+
 	/**
 	 * @return the flot
 	 */
@@ -149,19 +163,5 @@ public class TestObject {
 	public void setTime(String time) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		this.time = sdf.parse(time);
-	}
-
-	public static void main(String[] args) {
-		// tojson
-		List<String> list = new ArrayList<String>();
-		list.add("a");
-		list.add("b");
-		TestObject testObject = new TestObject(12, "Muoi hai", true, (float) 0.683, list, new Date());
-		JsonObject json = JsonUtil.toJsonObject(testObject);
-		System.out.println(json);
-
-		// from json
-		testObject = JsonUtil.fromJsonObject(json, TestObject.class);
-		System.out.println(JsonUtil.toJsonObject(testObject));
 	}
 }

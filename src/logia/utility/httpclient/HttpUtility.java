@@ -59,7 +59,7 @@ public abstract class HttpUtility {
 	protected HttpResponse        httpResponse;
 
 	/** The logger. */
-	protected final Logger        LOGGER              = Logger.getLogger(getClass());
+	protected final Logger        LOGGER              = Logger.getLogger(this.getClass());
 
 	/** The params. */
 	protected Map<String, String> params;
@@ -111,13 +111,13 @@ public abstract class HttpUtility {
 	 * @throws TimeoutException the timeout exception
 	 */
 	public int execute() throws IOException, TimeoutException {
-		if (httpHost != null) {
-			this.httpResponse = httpClient.execute(httpHost, httpRequest, httpContext);
+		if (this.httpHost != null) {
+			this.httpResponse = this.httpClient.execute(this.httpHost, this.httpRequest, this.httpContext);
 		}
 		else {
-			this.httpResponse = httpClient.execute((HttpUriRequest) httpRequest, httpContext);
+			this.httpResponse = this.httpClient.execute((HttpUriRequest) this.httpRequest, this.httpContext);
 		}
-		this.cookieStore = httpContext.getCookieStore();
+		this.cookieStore = this.httpContext.getCookieStore();
 		return this.httpResponse.getStatusLine().getStatusCode();
 	}
 
@@ -127,7 +127,7 @@ public abstract class HttpUtility {
 	 * @return the cookies
 	 */
 	public List<Cookie> getListCookies() {
-		return cookieStore.getCookies();
+		return this.cookieStore.getCookies();
 	}
 
 	/**
@@ -166,7 +166,7 @@ public abstract class HttpUtility {
 	 */
 	public void setCookie(Cookie cookie) {
 		this.cookieStore.addCookie(cookie);
-		this.httpContext.setCookieStore(cookieStore);
+		this.httpContext.setCookieStore(this.cookieStore);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public abstract class HttpUtility {
 	 */
 	public void setCookies(List<Cookie> cookies) {
 		for (Cookie cookie : cookies) {
-			setCookie(cookie);
+			this.setCookie(cookie);
 		}
 	}
 

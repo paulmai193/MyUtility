@@ -26,24 +26,6 @@ public class HttpSendPostMultipart extends HttpUtility {
 	/**
 	 * Instantiates a new http send post multipart.
 	 *
-	 * @param requestURL the request url
-	 * @param headers the headers
-	 * @param paramsText the params text
-	 * @param paramsFile the params file
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public HttpSendPostMultipart(String requestURL, Map<String, String> headers, Map<String, String> paramsText, Map<String, File> paramsFile)
-	        throws IOException {
-		super(requestURL, headers, paramsText);
-		this.filePart = paramsFile;
-		httpRequest = new HttpPost(requestURL);
-		setHeaders();
-		setParameters();
-	}
-
-	/**
-	 * Instantiates a new http send post multipart.
-	 *
 	 * @param httpHost the http host
 	 * @param requestURL the request url
 	 * @param headers the headers
@@ -52,12 +34,30 @@ public class HttpSendPostMultipart extends HttpUtility {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public HttpSendPostMultipart(HttpHost httpHost, String requestURL, Map<String, String> headers, Map<String, String> paramsText,
-	        Map<String, File> paramsFile) throws IOException {
+			Map<String, File> paramsFile) throws IOException {
 		super(httpHost, requestURL, headers, paramsText);
 		this.filePart = paramsFile;
-		httpRequest = new HttpPost(requestURL);
-		setHeaders();
-		setParameters();
+		this.httpRequest = new HttpPost(requestURL);
+		this.setHeaders();
+		this.setParameters();
+	}
+
+	/**
+	 * Instantiates a new http send post multipart.
+	 *
+	 * @param requestURL the request url
+	 * @param headers the headers
+	 * @param paramsText the params text
+	 * @param paramsFile the params file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public HttpSendPostMultipart(String requestURL, Map<String, String> headers, Map<String, String> paramsText, Map<String, File> paramsFile)
+			throws IOException {
+		super(requestURL, headers, paramsText);
+		this.filePart = paramsFile;
+		this.httpRequest = new HttpPost(requestURL);
+		this.setHeaders();
+		this.setParameters();
 	}
 
 	/*
@@ -73,9 +73,9 @@ public class HttpSendPostMultipart extends HttpUtility {
 		}
 		for (Entry<String, File> fileParam : this.filePart.entrySet()) {
 			multipartBuilder.addPart(fileParam.getKey(), new FileBody(fileParam.getValue(), ContentType.DEFAULT_BINARY, fileParam.getValue()
-			        .getName()));
+					.getName()));
 		}
-		((HttpEntityEnclosingRequest) httpRequest).setEntity(multipartBuilder.build());
+		((HttpEntityEnclosingRequest) this.httpRequest).setEntity(multipartBuilder.build());
 	}
 
 }

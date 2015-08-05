@@ -12,6 +12,8 @@ import java.util.Map;
 import logia.utility.json.annotaion.JsonKey;
 import logia.utility.reflection.MethodUtil;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -22,7 +24,9 @@ import com.google.gson.JsonPrimitive;
  * 
  * @author Paul Mai
  */
-public class JsonUtil {
+public final class JsonUtil {
+
+	private static final Logger LOGGER = Logger.getLogger(JsonUtil.class);
 
 	/**
 	 * From json array.
@@ -134,7 +138,7 @@ public class JsonUtil {
 							}
 						}
 						catch (IllegalArgumentException | ClassNotFoundException e) {
-							e.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 							return null;
 						}
 					}
@@ -186,11 +190,11 @@ public class JsonUtil {
 									ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
 									String valueClassName = pt.getActualTypeArguments()[0].toString();
 									method.invoke(object,
-											JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
+									        JsonUtil.fromJsonArray((JsonArray) value, Class.forName(valueClassName.replace("class ", ""))));
 								}
 							}
 							catch (IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
-								e.printStackTrace();
+								LOGGER.error(e.getMessage(), e);
 							}
 						}
 					}
@@ -198,7 +202,7 @@ public class JsonUtil {
 				return object;
 			}
 			catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 				return null;
 			}
 		}
@@ -308,7 +312,7 @@ public class JsonUtil {
 						}
 					}
 					catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -351,7 +355,7 @@ public class JsonUtil {
 							}
 						}
 						catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 						}
 					}
 				}
