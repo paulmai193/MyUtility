@@ -13,11 +13,11 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class ObjectPool<T> {
 
-	/** The pool. */
-	private ConcurrentLinkedQueue<T> pool;
-
 	/** The executor service. */
 	private ScheduledExecutorService executorService;
+
+	/** The pool. */
+	private ConcurrentLinkedQueue<T> pool;
 
 	/**
 	 * Creates the pool.

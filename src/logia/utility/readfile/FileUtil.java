@@ -95,12 +95,14 @@ public class FileUtil {
 	}
 
 	/**
-	 * Read file.
+	 * Read file.<br>
 	 *
+	 * @deprecated, use org.apache.commons.io.FileUtils.readFileToString() instead
 	 * @param fileUrl the file url
 	 * @return the string
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Deprecated
 	public static String readFile(String fileUrl) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		InputStream is = new FileInputStream(fileUrl);

@@ -15,14 +15,6 @@ import com.google.gson.JsonObject;
 @logia.utility.json.annotaion.JsonObject
 public class TestObject {
 
-	/** The m integer. */
-	@JsonKey(key = "MyInt")
-	int          integer;
-
-	/** The m string. */
-	@JsonKey(key = "MyString")
-	String       string;
-
 	/** The m boolean. */
 	@JsonKey(key = "MyBoolean")
 	Boolean      bool;
@@ -31,9 +23,17 @@ public class TestObject {
 	@JsonKey(key = "MyFloat")
 	float        flot;
 
+	/** The m integer. */
+	@JsonKey(key = "MyInt")
+	int          integer;
+
 	/** The list. */
 	@JsonKey(key = "list")
 	List<String> list;
+
+	/** The m string. */
+	@JsonKey(key = "MyString")
+	String       string;
 
 	/** The time. */
 	Date         time;

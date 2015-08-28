@@ -21,14 +21,14 @@ import com.notnoop.apns.PayloadBuilder;
  */
 public final class ApplePush {
 
+	/** The alert props. */
+	private Properties   alertProps = new Properties();
+
 	/** The logger. */
 	private final Logger LOGGER     = Logger.getLogger(this.getClass());
 
 	/** The service. */
 	private ApnsService  service;
-
-	/** The alert props. */
-	private Properties   alertProps = new Properties();
 
 	/**
 	 * Instantiates a new apple push.

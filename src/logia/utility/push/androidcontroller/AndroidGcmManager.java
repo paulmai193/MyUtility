@@ -21,14 +21,14 @@ import com.google.android.gcm.server.Sender;
  */
 public class AndroidGcmManager implements PushManager {
 
+	/** The alert props. */
+	private Properties   alertProps = new Properties();
+
 	/** The logger. */
 	private final Logger LOGGER     = Logger.getLogger(this.getClass());
 
 	/** The sender. */
 	private Sender       sender;
-
-	/** The alert props. */
-	private Properties   alertProps = new Properties();
 
 	/**
 	 * Instantiates a new android gcm manager.
