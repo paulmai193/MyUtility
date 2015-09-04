@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 /**
  * The Class GenericFileChecker.
  * 
@@ -11,8 +13,10 @@ import java.io.IOException;
  */
 public final class GenericFileChecker {
 
+	protected static final Logger LOGGER = Logger.getLogger("FileChecker");
+
 	public static String getType(byte[] bytes) {
-		String type = "";
+		String type = "N/A";
 
 		FileOutputStream fOut = null;
 		File tempFile = null;
@@ -20,7 +24,6 @@ public final class GenericFileChecker {
 			String PREFIX = "stream2file";
 			String SUFFIX = ".tmp";
 			tempFile = File.createTempFile(PREFIX, SUFFIX);
-			tempFile.deleteOnExit();
 			fOut = new FileOutputStream(tempFile);
 			fOut.write(bytes);
 			fOut.flush();
@@ -28,7 +31,7 @@ public final class GenericFileChecker {
 			type = GenericFileChecker.getType(tempFile);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			GenericFileChecker.LOGGER.error(e.getMessage(), e);
 		}
 		finally {
 			try {
@@ -70,8 +73,8 @@ public final class GenericFileChecker {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			GenericFileChecker.LOGGER.error(e.getMessage(), e);
+			return "N/A";
 		}
 	}
 
@@ -92,7 +95,7 @@ public final class GenericFileChecker {
 			isRecognize = GenericFileChecker.isRecognize(tempFile);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			GenericFileChecker.LOGGER.error(e.getMessage(), e);
 		}
 		finally {
 			try {
@@ -134,7 +137,7 @@ public final class GenericFileChecker {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			GenericFileChecker.LOGGER.error(e.getMessage(), e);
 			return false;
 		}
 	}

@@ -145,16 +145,13 @@ public abstract class HttpUtility {
 		else {
 			throw new IOException("Connection is not established.");
 		}
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			ArrayList<String> response = new ArrayList<String>();
 			String line = "";
 			while ((line = reader.readLine()) != null) {
 				buffer.append(line);
 				response.add(line);
 			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 		return buffer.toString();
 	}

@@ -32,7 +32,7 @@ public class HttpSendPut extends HttpUtility {
 	 */
 	public HttpSendPut(HttpHost host, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		super(host, requestURL, headers, params);
-		this.httpRequest = new HttpPut(requestURL);
+		this.httpRequest = new HttpPut(this.requestURL);
 		this.setHeaders();
 		this.setParameters();
 	}
@@ -47,7 +47,7 @@ public class HttpSendPut extends HttpUtility {
 	 */
 	public HttpSendPut(String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		super(requestURL, headers, params);
-		this.httpRequest = new HttpPut(requestURL);
+		this.httpRequest = new HttpPut(this.requestURL);
 		this.setHeaders();
 		this.setParameters();
 	}

@@ -37,7 +37,7 @@ public class HttpSendPostMultipart extends HttpUtility {
 			Map<String, File> paramsFile) throws IOException {
 		super(httpHost, requestURL, headers, paramsText);
 		this.filePart = paramsFile;
-		this.httpRequest = new HttpPost(requestURL);
+		this.httpRequest = new HttpPost(this.requestURL);
 		this.setHeaders();
 		this.setParameters();
 	}
@@ -55,7 +55,7 @@ public class HttpSendPostMultipart extends HttpUtility {
 			throws IOException {
 		super(requestURL, headers, paramsText);
 		this.filePart = paramsFile;
-		this.httpRequest = new HttpPost(requestURL);
+		this.httpRequest = new HttpPost(this.requestURL);
 		this.setHeaders();
 		this.setParameters();
 	}

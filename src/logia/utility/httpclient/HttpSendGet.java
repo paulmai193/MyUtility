@@ -31,7 +31,7 @@ public class HttpSendGet extends HttpUtility {
 	public HttpSendGet(HttpHost host, String requestURL, Map<String, String> headers, Map<String, String> params) throws IOException {
 		super(host, requestURL, headers, params);
 		this.setParameters();
-		this.httpRequest = new HttpGet(requestURL);
+		this.httpRequest = new HttpGet(this.requestURL);
 		this.setHeaders();
 		if (this.requestParams.length() > 0) {
 			this.requestURL = this.requestURL + "?" + this.requestParams.toString();
@@ -73,9 +73,6 @@ public class HttpSendGet extends HttpUtility {
 			}
 			catch (UnsupportedEncodingException e) {
 				this.requestParams.append("=").append(value);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
 			}
 			this.requestParams.append("&");
 		}
