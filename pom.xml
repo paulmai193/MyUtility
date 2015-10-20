@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>logia</groupId>
 	<artifactId>logia-utility</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2</version>
 	<repositories>
 		<repository>
 			<id>com.springsource.repository.bundles.external</id>
@@ -44,6 +44,7 @@
 		<apns.version>0.2.3</apns.version>
 		<log4j.version>1.2.17</log4j.version>
 		<http-client.version>4.5</http-client.version>
+		<java-mail.version>1.5.2</java-mail.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -92,5 +93,22 @@
 			<version>${http-client.version}</version>
 		</dependency>
 		<!-- end HTTP Client -->
+		<!-- Java mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>${java-mail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${java-mail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.rpc</groupId>
+			<artifactId>javax.xml.rpc-api</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- end Java mail -->
 	</dependencies>
 </project>
