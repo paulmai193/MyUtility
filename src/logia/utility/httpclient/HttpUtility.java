@@ -190,6 +190,9 @@ public abstract class HttpUtility {
 	 * Sets the headers.
 	 */
 	protected void setHeaders() {
+		if (this.headers == null) {
+			return;
+		}
 		for (Entry<String, String> header : this.headers.entrySet()) {
 			this.httpRequest.setHeader(header.getKey(), header.getValue());
 		}

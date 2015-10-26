@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -55,42 +58,17 @@ public class EmailUtil {
 	/**
 	 * Send email.
 	 *
-	 * @param recipients the recipients
-	 * @param nameRecipients the name recipients
 	 * @param subject the subject
 	 * @param content the content
-	 * @param attachment the attachment file
-	 * @param receipientType the receipient type
-	 * @return true, if successful
-	 * @throws AddressException the address exception
-	 * @throws FileNotFoundException the file not found exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws MessagingException the messaging exception
-	 */
-	public void sendEmail(String recipients, String nameRecipients, String subject, String content, File attachment, RecipientType receipientType)
-	        throws AddressException, FileNotFoundException, IOException, MessagingException {
-		List<File> attachments = new ArrayList<File>(1);
-		attachments.add(attachment);
-		this.sendEmail(recipients, nameRecipients, subject, content, attachments, receipientType);
-	}
-
-	/**
-	 * Send email.
-	 *
-	 * @param recipients the recipients
-	 * @param nameRecipients the name recipients
-	 * @param subject the subject
-	 * @param content the content
-	 * @param attachments the list of attachment files
-	 * @param receipientType the receipient type
-	 * @return true, if successful
+	 * @param attachments the list attachments
+	 * @param recipients the map recipients group by type: TO, CC, BCC
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 */
-	public void sendEmail(String recipients, String nameRecipients, String subject, String content, List<File> attachments,
-	        RecipientType receipientType) throws FileNotFoundException, IOException, AddressException, MessagingException {
+	public void sendEmail(String subject, String content, List<File> attachments, Map<RecipientType, String> recipients)
+	        throws FileNotFoundException, IOException, AddressException, MessagingException {
 		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
 			this.initialized();
 		}
@@ -98,7 +76,9 @@ public class EmailUtil {
 		MimeMessage message = new MimeMessage(EmailUtil._session);
 
 		message.setFrom(new InternetAddress(EmailUtil._username));
-		message.setRecipients(receipientType, InternetAddress.parse(recipients));
+		for (Entry<RecipientType, String> element : recipients.entrySet()) {
+			message.setRecipients(element.getKey(), InternetAddress.parse(element.getValue()));
+		}
 		message.setSubject(subject, "UTF-8");
 
 		Multipart multipart = new MimeMultipart();
@@ -119,30 +99,88 @@ public class EmailUtil {
 	/**
 	 * Send email.
 	 *
-	 * @param recipients the recipients
-	 * @param nameRecipients the name recipients
 	 * @param subject the subject
 	 * @param content the content
-	 * @param receipientType the receipient type (TO, CC, BCC)
-	 * @return true, if successful
+	 * @param recipients the map recipients group by type: TO, CC, BCC
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 */
-	public void sendEmail(String recipients, String nameRecipients, String subject, String content, RecipientType receipientType)
-	        throws FileNotFoundException, IOException, AddressException, MessagingException {
+	public void sendEmail(String subject, String content, Map<RecipientType, String> recipients) throws FileNotFoundException, IOException,
+	        AddressException, MessagingException {
 		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
 			this.initialized();
 		}
 		MimeMessage message = new MimeMessage(EmailUtil._session);
 
 		message.setFrom(new InternetAddress(EmailUtil._username));
-		message.setRecipients(receipientType, InternetAddress.parse(recipients));
+		for (Entry<RecipientType, String> element : recipients.entrySet()) {
+			message.setRecipients(element.getKey(), InternetAddress.parse(element.getValue()));
+		}
 		message.setSubject(subject, "UTF-8");
 		message.setContent(content, "text/html; charset=UTF-8");
 
 		Transport.send(message);
+	}
+
+	/**
+	 * Send email.
+	 *
+	 * @param recipients the recipients
+	 * @param subject the subject
+	 * @param content the content
+	 * @param attachment the attachment file
+	 * @param receipientType the receipient type
+	 * @throws AddressException the address exception
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws MessagingException the messaging exception
+	 */
+	public void sendEmail(String recipients, String subject, String content, File attachment, RecipientType receipientType) throws AddressException,
+	        FileNotFoundException, IOException, MessagingException {
+		List<File> attachments = new ArrayList<File>(1);
+		attachments.add(attachment);
+		this.sendEmail(recipients, subject, content, attachments, receipientType);
+	}
+
+	/**
+	 * Send email.
+	 *
+	 * @param recipients the recipients
+	 * @param subject the subject
+	 * @param content the content
+	 * @param attachments the list of attachment files
+	 * @param receipientType the receipient type
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws AddressException the address exception
+	 * @throws MessagingException the messaging exception
+	 */
+	public void sendEmail(String recipients, String subject, String content, List<File> attachments, RecipientType receipientType)
+	        throws FileNotFoundException, IOException, AddressException, MessagingException {
+		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
+		mapRecipients.put(receipientType, recipients);
+		this.sendEmail(subject, content, attachments, mapRecipients);
+	}
+
+	/**
+	 * Send email.
+	 *
+	 * @param recipients the recipients
+	 * @param subject the subject
+	 * @param content the content
+	 * @param recipientType the recipient type (TO, CC, BCC)
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws AddressException the address exception
+	 * @throws MessagingException the messaging exception
+	 */
+	public void sendEmail(String recipients, String subject, String content, RecipientType recipientType) throws FileNotFoundException, IOException,
+	        AddressException, MessagingException {
+		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
+		mapRecipients.put(recipientType, recipients);
+		this.sendEmail(subject, content, mapRecipients);
 	}
 
 	/**
@@ -168,8 +206,7 @@ public class EmailUtil {
 	 */
 	private void initialized() throws FileNotFoundException, IOException {
 		Properties props = new Properties();
-		String propFile = EmailUtil.class.getClassLoader().getResource(EmailUtil._emailPropertiesPath).getPath();
-		props.load(new FileInputStream(propFile));
+		props.load(new FileInputStream(EmailUtil._emailPropertiesPath));
 		EmailUtil._username = props.containsKey("email.username") ? props.getProperty("email.username") : "n/a";
 		EmailUtil._password = props.containsKey("email.password") ? props.getProperty("email.password") : "n/a";
 

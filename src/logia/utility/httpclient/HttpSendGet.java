@@ -64,6 +64,9 @@ public class HttpSendGet extends HttpUtility {
 	 */
 	@Override
 	protected void setParameters() {
+		if (this.params == null) {
+			return;
+		}
 		for (Entry<String, String> param : this.params.entrySet()) {
 			String key = param.getKey();
 			String value = param.getValue();

@@ -59,6 +59,9 @@ public class HttpSendPost extends HttpUtility {
 	 */
 	@Override
 	protected void setParameters() {
+		if (this.params == null) {
+			return;
+		}
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		for (Entry<String, String> param : this.params.entrySet()) {
 			urlParameters.add(new BasicNameValuePair(param.getKey(), param.getValue()));

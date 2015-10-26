@@ -34,7 +34,7 @@ public class HttpSendPostMultipart extends HttpUtility {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public HttpSendPostMultipart(HttpHost httpHost, String requestURL, Map<String, String> headers, Map<String, String> paramsText,
-			Map<String, File> paramsFile) throws IOException {
+	        Map<String, File> paramsFile) throws IOException {
 		super(httpHost, requestURL, headers, paramsText);
 		this.filePart = paramsFile;
 		this.httpRequest = new HttpPost(this.requestURL);
@@ -52,7 +52,7 @@ public class HttpSendPostMultipart extends HttpUtility {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public HttpSendPostMultipart(String requestURL, Map<String, String> headers, Map<String, String> paramsText, Map<String, File> paramsFile)
-			throws IOException {
+	        throws IOException {
 		super(requestURL, headers, paramsText);
 		this.filePart = paramsFile;
 		this.httpRequest = new HttpPost(this.requestURL);
@@ -67,13 +67,16 @@ public class HttpSendPostMultipart extends HttpUtility {
 	 */
 	@Override
 	protected void setParameters() {
+		if (this.params == null) {
+			return;
+		}
 		MultipartEntityBuilder multipartBuilder = MultipartEntityBuilder.create();
 		for (Entry<String, String> stringParam : this.params.entrySet()) {
 			multipartBuilder.addPart(stringParam.getKey(), new StringBody(stringParam.getValue(), ContentType.TEXT_PLAIN));
 		}
 		for (Entry<String, File> fileParam : this.filePart.entrySet()) {
 			multipartBuilder.addPart(fileParam.getKey(), new FileBody(fileParam.getValue(), ContentType.DEFAULT_BINARY, fileParam.getValue()
-					.getName()));
+			        .getName()));
 		}
 		((HttpEntityEnclosingRequest) this.httpRequest).setEntity(multipartBuilder.build());
 	}
