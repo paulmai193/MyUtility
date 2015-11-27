@@ -61,7 +61,7 @@ public class EmailUtil {
 	 * @param subject the subject
 	 * @param content the content
 	 * @param attachments the list attachments
-	 * @param recipients the map recipients group by type: TO, CC, BCC
+	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
@@ -101,7 +101,7 @@ public class EmailUtil {
 	 *
 	 * @param subject the subject
 	 * @param content the content
-	 * @param recipients the map recipients group by type: TO, CC, BCC
+	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
@@ -142,6 +142,25 @@ public class EmailUtil {
 		List<File> attachments = new ArrayList<File>(1);
 		attachments.add(attachment);
 		this.sendEmail(recipients, subject, content, attachments, receipientType);
+	}
+
+	/**
+	 * Send email.
+	 *
+	 * @param subject the subject
+	 * @param content the content
+	 * @param attachment the attachment
+	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
+	 * @throws AddressException the address exception
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws MessagingException the messaging exception
+	 */
+	public void sendEmail(String subject, String content, File attachment, Map<RecipientType, String> recipients) throws AddressException,
+	        FileNotFoundException, IOException, MessagingException {
+		List<File> attachments = new ArrayList<File>(1);
+		attachments.add(attachment);
+		this.sendEmail(subject, content, attachments, recipients);
 	}
 
 	/**

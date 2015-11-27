@@ -1,15 +1,14 @@
 package logia.utility.httpclient;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -138,22 +137,23 @@ public abstract class HttpUtility {
 	 */
 	public String getResponseContent() throws IOException {
 		InputStream inputStream = null;
-		StringBuffer buffer = new StringBuffer();
+		// StringBuffer buffer = new StringBuffer();
 		if (this.httpClient != null) {
 			inputStream = this.httpResponse.getEntity().getContent();
 		}
 		else {
 			throw new IOException("Connection is not established.");
 		}
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			ArrayList<String> response = new ArrayList<String>();
-			String line = "";
-			while ((line = reader.readLine()) != null) {
-				buffer.append(line);
-				response.add(line);
-			}
-		}
-		return buffer.toString();
+		// try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+		// ArrayList<String> response = new ArrayList<String>();
+		// String line = "";
+		// while ((line = reader.readLine()) != null) {
+		// buffer.append(line);
+		// response.add(line);
+		// }
+		// }
+		String responseContent = IOUtils.toString(inputStream, Charsets.UTF_8);
+		return responseContent;
 	}
 
 	/**
