@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +68,10 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String subject, String content, List<File> attachments, Map<RecipientType, String> recipients)
-	        throws FileNotFoundException, IOException, AddressException, MessagingException {
+	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
 		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
 			this.initialized();
 		}
@@ -106,9 +109,10 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String subject, String content, Map<RecipientType, String> recipients) throws FileNotFoundException, IOException,
-	        AddressException, MessagingException {
+	        AddressException, MessagingException, URISyntaxException {
 		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
 			this.initialized();
 		}
@@ -136,9 +140,10 @@ public class EmailUtil {
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String recipients, String subject, String content, File attachment, RecipientType receipientType) throws AddressException,
-	        FileNotFoundException, IOException, MessagingException {
+	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
 		List<File> attachments = new ArrayList<File>(1);
 		attachments.add(attachment);
 		this.sendEmail(recipients, subject, content, attachments, receipientType);
@@ -155,9 +160,10 @@ public class EmailUtil {
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String subject, String content, File attachment, Map<RecipientType, String> recipients) throws AddressException,
-	        FileNotFoundException, IOException, MessagingException {
+	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
 		List<File> attachments = new ArrayList<File>(1);
 		attachments.add(attachment);
 		this.sendEmail(subject, content, attachments, recipients);
@@ -175,9 +181,10 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String recipients, String subject, String content, List<File> attachments, RecipientType receipientType)
-	        throws FileNotFoundException, IOException, AddressException, MessagingException {
+	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
 		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
 		mapRecipients.put(receipientType, recipients);
 		this.sendEmail(subject, content, attachments, mapRecipients);
@@ -194,9 +201,10 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
 	 */
 	public void sendEmail(String recipients, String subject, String content, RecipientType recipientType) throws FileNotFoundException, IOException,
-	        AddressException, MessagingException {
+	        AddressException, MessagingException, URISyntaxException {
 		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
 		mapRecipients.put(recipientType, recipients);
 		this.sendEmail(subject, content, mapRecipients);
@@ -222,10 +230,12 @@ public class EmailUtil {
 	 *
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws URISyntaxException the URI syntax exception
 	 */
-	private void initialized() throws FileNotFoundException, IOException {
+	private void initialized() throws FileNotFoundException, IOException, URISyntaxException {
 		Properties props = new Properties();
-		props.load(new FileInputStream(EmailUtil._emailPropertiesPath));
+		File propFile = new File(new URI(_emailPropertiesPath));
+		props.load(new FileInputStream(propFile));
 		EmailUtil._username = props.containsKey("email.username") ? props.getProperty("email.username") : "n/a";
 		EmailUtil._password = props.containsKey("email.password") ? props.getProperty("email.password") : "n/a";
 

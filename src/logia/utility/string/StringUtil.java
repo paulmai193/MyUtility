@@ -1,5 +1,6 @@
 package logia.utility.string;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 
 /**
@@ -30,11 +31,14 @@ public class StringUtil {
 	/**
 	 * Calculate match string.
 	 *
-	 * @param first the first byte array of first string
-	 * @param second the second byte array of second string
+	 * @param firstString the first string
+	 * @param secondString the second string
 	 * @return the integer value result of compare
 	 */
-	public static int calculateMatchString(byte[] first, byte[] second) {
+	public static int calculateMatchString(String firstString, String secondString) {
+		byte[] first = firstString.getBytes();
+		byte[] second = secondString.getBytes();
+
 		// Determine how many zone must calculate
 		int loop;
 		boolean fstBigger;
@@ -98,11 +102,15 @@ public class StringUtil {
 	 * @return the string
 	 */
 	public static String removeAccent(String s) {
-		StringBuilder sb = new StringBuilder(s);
-		for (int i = 0; i < sb.length(); i++) {
-			sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
-		}
-		return sb.toString();
+		// StringBuilder sb = new StringBuilder(s);
+		// for (int i = 0; i < sb.length(); i++) {
+		// sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
+		// }
+		// return sb.toString();
+
+		s = Normalizer.normalize(s, Normalizer.Form.NFD);
+		s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "").replaceAll("đ", "d").replaceAll("Đ", "D");
+		return s;
 	}
 
 	/**
@@ -112,11 +120,13 @@ public class StringUtil {
 	 * @return the string
 	 */
 	public static String removeAccentLowerCase(String s) {
-		StringBuilder sb = new StringBuilder(s);
-		for (int i = 0; i < sb.length(); i++) {
-			sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
-		}
-		return sb.toString().toLowerCase();
+		// StringBuilder sb = new StringBuilder(s);
+		// for (int i = 0; i < sb.length(); i++) {
+		// sb.setCharAt(i, StringUtil.removeAccent(sb.charAt(i)));
+		// }
+		// return sb.toString().toLowerCase();
+
+		return removeAccent(s).toLowerCase();
 	}
 
 	/**
