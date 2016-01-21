@@ -36,193 +36,210 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EmailUtil {
 
-	/** The _email properties path. */
-	private static String  _emailPropertiesPath = "email.properties";
+	private static File    propertyFile = new File("email.properties");
 
 	/** The password. */
-	private static String  _password;
+	private static String  password;
 
 	/** The session. */
-	private static Session _session;
+	private static Session session;
 
 	/** The username. */
-	private static String  _username;
+	private static String  username;
 
 	/**
 	 * Sets the properties path.
 	 *
-	 * @param propertiesPath the new properties path
+	 * @param __propertiesPath the new properties path
 	 */
-	public static void setPropertiesPath(String propertiesPath) {
-		EmailUtil._emailPropertiesPath = propertiesPath;
+	public static void setPropertiesPath(String __propertiesPath) {
+		EmailUtil.propertyFile = new File(__propertiesPath);
+	}
+
+	/**
+	 * Sets the properties path.
+	 *
+	 * @param __propertiesURI the new properties path
+	 */
+	public static void setPropertiesPath(URI __propertiesURI) {
+		EmailUtil.propertyFile = new File(__propertiesURI);
+	}
+
+	/**
+	 * Sets the properties path.
+	 *
+	 * @param __propertiesFile the new properties path
+	 */
+	public static void setPropertiesPath(File __propertiesFile) {
+		EmailUtil.propertyFile = __propertiesFile;
 	}
 
 	/**
 	 * Send email.
 	 *
-	 * @param subject the subject
-	 * @param content the content
-	 * @param attachments the list attachments
-	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __attachments the list attachments
+	 * @param __recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String subject, String content, List<File> attachments, Map<RecipientType, String> recipients)
+	public void sendEmail(String __subject, String __content, List<File> __attachments, Map<RecipientType, String> __recipients)
 	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
-		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
+		if (EmailUtil.session == null || EmailUtil.username == null || EmailUtil.password == null) {
 			this.initialized();
 		}
 		// Create a default MimeMessage object.
-		MimeMessage message = new MimeMessage(EmailUtil._session);
+		MimeMessage _message = new MimeMessage(EmailUtil.session);
 
-		message.setFrom(new InternetAddress(EmailUtil._username));
-		for (Entry<RecipientType, String> element : recipients.entrySet()) {
-			message.setRecipients(element.getKey(), InternetAddress.parse(element.getValue()));
+		_message.setFrom(new InternetAddress(EmailUtil.username));
+		for (Entry<RecipientType, String> _element : __recipients.entrySet()) {
+			_message.setRecipients(_element.getKey(), InternetAddress.parse(_element.getValue()));
 		}
-		message.setSubject(subject, "UTF-8");
+		_message.setSubject(__subject, "UTF-8");
 
-		Multipart multipart = new MimeMultipart();
+		Multipart _multipart = new MimeMultipart();
 
-		BodyPart messageBodyPart = new MimeBodyPart();
-		messageBodyPart.setContent(content, "text/html; charset=UTF-8");
-		multipart.addBodyPart(messageBodyPart);
+		BodyPart _messageBodyPart = new MimeBodyPart();
+		_messageBodyPart.setContent(__content, "text/html; charset=UTF-8");
+		_multipart.addBodyPart(_messageBodyPart);
 
-		for (File file : attachments) {
-			this.attachFile(multipart, file);
+		for (File _file : __attachments) {
+			this.attachFile(_multipart, _file);
 		}
 
-		message.setContent(multipart);
+		_message.setContent(_multipart);
 
-		Transport.send(message);
+		Transport.send(_message);
 	}
 
 	/**
 	 * Send email.
 	 *
-	 * @param subject the subject
-	 * @param content the content
-	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String subject, String content, Map<RecipientType, String> recipients) throws FileNotFoundException, IOException,
+	public void sendEmail(String __subject, String __content, Map<RecipientType, String> __recipients) throws FileNotFoundException, IOException,
 	        AddressException, MessagingException, URISyntaxException {
-		if (EmailUtil._session == null || EmailUtil._username == null || EmailUtil._password == null) {
+		if (EmailUtil.session == null || EmailUtil.username == null || EmailUtil.password == null) {
 			this.initialized();
 		}
-		MimeMessage message = new MimeMessage(EmailUtil._session);
+		MimeMessage _message = new MimeMessage(EmailUtil.session);
 
-		message.setFrom(new InternetAddress(EmailUtil._username));
-		for (Entry<RecipientType, String> element : recipients.entrySet()) {
-			message.setRecipients(element.getKey(), InternetAddress.parse(element.getValue()));
+		_message.setFrom(new InternetAddress(EmailUtil.username));
+		for (Entry<RecipientType, String> _element : __recipients.entrySet()) {
+			_message.setRecipients(_element.getKey(), InternetAddress.parse(_element.getValue()));
 		}
-		message.setSubject(subject, "UTF-8");
-		message.setContent(content, "text/html; charset=UTF-8");
+		_message.setSubject(__subject, "UTF-8");
+		_message.setContent(__content, "text/html; charset=UTF-8");
 
-		Transport.send(message);
+		Transport.send(_message);
 	}
 
 	/**
 	 * Send email.
 	 *
-	 * @param recipients the recipients
-	 * @param subject the subject
-	 * @param content the content
-	 * @param attachment the attachment file
-	 * @param receipientType the receipient type
+	 * @param __recipients the recipients
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __attachment the attachment file
+	 * @param __receipientType the receipient type
 	 * @throws AddressException the address exception
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String recipients, String subject, String content, File attachment, RecipientType receipientType) throws AddressException,
+	public void sendEmail(String __recipients, String __subject, String __content, File __attachment, RecipientType __receipientType)
+	        throws AddressException, FileNotFoundException, IOException, MessagingException, URISyntaxException {
+		List<File> _attachments = new ArrayList<File>(1);
+		_attachments.add(__attachment);
+		this.sendEmail(__recipients, __subject, __content, _attachments, __receipientType);
+	}
+
+	/**
+	 * Send email.
+	 *
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __attachment the attachment
+	 * @param __recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
+	 * @throws AddressException the address exception
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws MessagingException the messaging exception
+	 * @throws URISyntaxException the URI syntax exception
+	 */
+	public void sendEmail(String __subject, String __content, File __attachment, Map<RecipientType, String> __recipients) throws AddressException,
 	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
-		List<File> attachments = new ArrayList<File>(1);
-		attachments.add(attachment);
-		this.sendEmail(recipients, subject, content, attachments, receipientType);
+		List<File> _attachments = new ArrayList<File>(1);
+		_attachments.add(__attachment);
+		this.sendEmail(__subject, __content, _attachments, __recipients);
 	}
 
 	/**
 	 * Send email.
 	 *
-	 * @param subject the subject
-	 * @param content the content
-	 * @param attachment the attachment
-	 * @param recipients the map recipients group by type: TO, CC, BCC. List email seperate by ","
-	 * @throws AddressException the address exception
-	 * @throws FileNotFoundException the file not found exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws MessagingException the messaging exception
-	 * @throws URISyntaxException the URI syntax exception
-	 */
-	public void sendEmail(String subject, String content, File attachment, Map<RecipientType, String> recipients) throws AddressException,
-	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
-		List<File> attachments = new ArrayList<File>(1);
-		attachments.add(attachment);
-		this.sendEmail(subject, content, attachments, recipients);
-	}
-
-	/**
-	 * Send email.
-	 *
-	 * @param recipients the recipients
-	 * @param subject the subject
-	 * @param content the content
-	 * @param attachments the list of attachment files
-	 * @param receipientType the receipient type
+	 * @param __recipients the recipients
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __attachments the list of attachment files
+	 * @param __receipientType the receipient type
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String recipients, String subject, String content, List<File> attachments, RecipientType receipientType)
+	public void sendEmail(String __recipients, String __subject, String __content, List<File> __attachments, RecipientType __receipientType)
 	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
-		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
-		mapRecipients.put(receipientType, recipients);
-		this.sendEmail(subject, content, attachments, mapRecipients);
+		Map<RecipientType, String> _mapRecipients = new HashMap<RecipientType, String>(1);
+		_mapRecipients.put(__receipientType, __recipients);
+		this.sendEmail(__subject, __content, __attachments, _mapRecipients);
 	}
 
 	/**
 	 * Send email.
 	 *
-	 * @param recipients the recipients
-	 * @param subject the subject
-	 * @param content the content
-	 * @param recipientType the recipient type (TO, CC, BCC)
+	 * @param __recipients the recipients
+	 * @param __subject the subject
+	 * @param __content the content
+	 * @param __recipientType the recipient type (TO, CC, BCC)
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AddressException the address exception
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String recipients, String subject, String content, RecipientType recipientType) throws FileNotFoundException, IOException,
-	        AddressException, MessagingException, URISyntaxException {
-		Map<RecipientType, String> mapRecipients = new HashMap<RecipientType, String>(1);
-		mapRecipients.put(recipientType, recipients);
-		this.sendEmail(subject, content, mapRecipients);
+	public void sendEmail(String __recipients, String __subject, String __content, RecipientType __recipientType) throws FileNotFoundException,
+	        IOException, AddressException, MessagingException, URISyntaxException {
+		Map<RecipientType, String> _mapRecipients = new HashMap<RecipientType, String>(1);
+		_mapRecipients.put(__recipientType, __recipients);
+		this.sendEmail(__subject, __content, _mapRecipients);
 	}
 
 	/**
 	 * Attach file.
 	 *
-	 * @param multipart the multipart
-	 * @param file the file
+	 * @param __multipart the multipart
+	 * @param __file the file
 	 * @throws MessagingException the messaging exception
 	 */
-	private void attachFile(Multipart multipart, File file) throws MessagingException {
-		BodyPart attachPart = new MimeBodyPart();
-		DataSource source = new FileDataSource(file);
-		attachPart.setDataHandler(new DataHandler(source));
-		attachPart.setFileName(file.getName());
-		multipart.addBodyPart(attachPart);
+	private void attachFile(Multipart __multipart, File __file) throws MessagingException {
+		BodyPart _attachPart = new MimeBodyPart();
+		DataSource _source = new FileDataSource(__file);
+		_attachPart.setDataHandler(new DataHandler(_source));
+		_attachPart.setFileName(__file.getName());
+		__multipart.addBodyPart(_attachPart);
 	}
 
 	/**
@@ -233,17 +250,16 @@ public class EmailUtil {
 	 * @throws URISyntaxException the URI syntax exception
 	 */
 	private void initialized() throws FileNotFoundException, IOException, URISyntaxException {
-		Properties props = new Properties();
-		File propFile = new File(new URI(_emailPropertiesPath));
-		props.load(new FileInputStream(propFile));
-		EmailUtil._username = props.containsKey("email.username") ? props.getProperty("email.username") : "n/a";
-		EmailUtil._password = props.containsKey("email.password") ? props.getProperty("email.password") : "n/a";
+		Properties _props = new Properties();
+		_props.load(new FileInputStream(propertyFile));
+		EmailUtil.username = _props.containsKey("email.username") ? _props.getProperty("email.username") : "n/a";
+		EmailUtil.password = _props.containsKey("email.password") ? _props.getProperty("email.password") : "n/a";
 
-		EmailUtil._session = Session.getInstance(props, new javax.mail.Authenticator() {
+		EmailUtil.session = Session.getInstance(_props, new javax.mail.Authenticator() {
 
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(EmailUtil._username, EmailUtil._password);
+				return new PasswordAuthentication(EmailUtil.username, EmailUtil.password);
 			}
 		});
 	}
