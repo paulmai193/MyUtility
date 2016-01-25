@@ -36,16 +36,16 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EmailUtil {
 
-	private static File    propertyFile = new File("email.properties");
+	private static File      propertyFile = new File("email.properties");
 
 	/** The password. */
-	private static String  password;
+	protected static String  password;
 
 	/** The session. */
-	private static Session session;
+	protected static Session session;
 
 	/** The username. */
-	private static String  username;
+	protected static String  username;
 
 	/**
 	 * Sets the properties path.
@@ -249,7 +249,7 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	private void initialized() throws FileNotFoundException, IOException, URISyntaxException {
+	protected final void initialized() throws FileNotFoundException, IOException, URISyntaxException {
 		Properties _props = new Properties();
 		_props.load(new FileInputStream(propertyFile));
 		EmailUtil.username = _props.containsKey("email.username") ? _props.getProperty("email.username") : "n/a";
