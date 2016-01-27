@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>logia</groupId>
 	<artifactId>logia-utility</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<repositories>
 		<repository>
 			<id>com.springsource.repository.bundles.external</id>
@@ -62,37 +62,14 @@
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
 		</dependency>
-		<!-- Push notification -->
-		<dependency>
-			<groupId>com.google.android.gcm</groupId>
-			<artifactId>gcm-server</artifactId>
-			<version>${gcm-server.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.notnoop.apns</groupId>
-			<artifactId>apns</artifactId>
-			<version>${apns.version}</version>
-		</dependency>
-		<!-- end Push notification -->
+		
 		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		<!-- end Logging -->
-		<!-- HTTP Client -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${http-client.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>${http-client.version}</version>
-		</dependency>
-		<!-- end HTTP Client -->
+		<!-- end Logging -->		
 		<!-- Java mail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
