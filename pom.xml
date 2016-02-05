@@ -43,7 +43,6 @@
 		<gcm-server.version>1.0.2</gcm-server.version>
 		<apns.version>0.2.3</apns.version>
 		<log4j.version>1.2.17</log4j.version>
-		<http-client.version>4.5</http-client.version>
 		<java-mail.version>1.5.2</java-mail.version>
 	</properties>
 	<dependencies>

@@ -2,6 +2,7 @@ package logia.utility.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,6 +40,32 @@ public class CollectionUtil {
 			}
 			else {
 				temp.clear();
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Swap element in collection to new position.
+	 *
+	 * @param <T> the generic type
+	 * @param list the collection
+	 * @param indexOfElement the index of specific element
+	 * @param newIndex the new index of this element
+	 * @return the new List
+	 */
+	public static <T> List<T> swapElement(Collection<T> list, int indexOfElement, int newIndex) {
+		List<T> temp = new ArrayList<T>(list);
+		if (indexOfElement > newIndex) {
+			while (indexOfElement - newIndex > 0) {
+				Collections.swap(temp, indexOfElement, indexOfElement - 1);
+				indexOfElement--;
+			}
+		}
+		else if (indexOfElement < newIndex) {
+			while (newIndex - indexOfElement > 0) {
+				Collections.swap(temp, indexOfElement, indexOfElement + 1);
+				indexOfElement++;
 			}
 		}
 		return temp;
