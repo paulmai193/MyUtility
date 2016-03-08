@@ -17,7 +17,9 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * The Class JsonTool.
@@ -32,48 +34,63 @@ public final class JsonUtil {
 	 * From json array.
 	 *
 	 * @param <T> the generic type
-	 * @param jsonArray the json array
-	 * @param clazz the clazz
+	 * @param __jsonArray the json array
+	 * @param __clazz the clazz
 	 * @return the list
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T> List<T> fromJsonArray(JsonArray jsonArray, Class<T> clazz) {
-		List list = new ArrayList<>();
-		for (JsonElement element : jsonArray) {
-			if (element instanceof JsonPrimitive) {
-				if (clazz.isAssignableFrom(Boolean.class) || clazz.isAssignableFrom(boolean.class)) {
-					list.add(element.getAsBoolean());
+	public static <T> List<T> fromJsonArray(JsonArray __jsonArray, Class<T> __clazz) {
+		List _list = new ArrayList<>();
+		for (JsonElement _element : __jsonArray) {
+			if (_element instanceof JsonPrimitive) {
+				if (__clazz.isAssignableFrom(Boolean.class) || __clazz.isAssignableFrom(boolean.class)) {
+					_list.add(_element.getAsBoolean());
 				}
-				else if (clazz.isAssignableFrom(Character.class) || clazz.isAssignableFrom(char.class)) {
-					list.add(element.getAsCharacter());
+				else if (__clazz.isAssignableFrom(Character.class) || __clazz.isAssignableFrom(char.class)) {
+					_list.add(_element.getAsCharacter());
 				}
-				else if (clazz.isAssignableFrom(Byte.class) || clazz.isAssignableFrom(byte.class)) {
-					list.add(element.getAsByte());
+				else if (__clazz.isAssignableFrom(Byte.class) || __clazz.isAssignableFrom(byte.class)) {
+					_list.add(_element.getAsByte());
 				}
-				else if (clazz.isAssignableFrom(Short.class) || clazz.isAssignableFrom(short.class)) {
-					list.add(element.getAsShort());
+				else if (__clazz.isAssignableFrom(Short.class) || __clazz.isAssignableFrom(short.class)) {
+					_list.add(_element.getAsShort());
 				}
-				else if (clazz.isAssignableFrom(Integer.class) || clazz.isAssignableFrom(int.class)) {
-					list.add(element.getAsInt());
+				else if (__clazz.isAssignableFrom(Integer.class) || __clazz.isAssignableFrom(int.class)) {
+					_list.add(_element.getAsInt());
 				}
-				else if (clazz.isAssignableFrom(Long.class) || clazz.isAssignableFrom(long.class)) {
-					list.add(element.getAsLong());
+				else if (__clazz.isAssignableFrom(Long.class) || __clazz.isAssignableFrom(long.class)) {
+					_list.add(_element.getAsLong());
 				}
-				else if (clazz.isAssignableFrom(Float.class) || clazz.isAssignableFrom(float.class)) {
-					list.add(element.getAsFloat());
+				else if (__clazz.isAssignableFrom(Float.class) || __clazz.isAssignableFrom(float.class)) {
+					_list.add(_element.getAsFloat());
 				}
-				else if (clazz.isAssignableFrom(Double.class) || clazz.isAssignableFrom(double.class)) {
-					list.add(element.getAsDouble());
+				else if (__clazz.isAssignableFrom(Double.class) || __clazz.isAssignableFrom(double.class)) {
+					_list.add(_element.getAsDouble());
 				}
-				else if (clazz.isAssignableFrom(String.class)) {
-					list.add(element.getAsString());
+				else if (__clazz.isAssignableFrom(String.class)) {
+					_list.add(_element.getAsString());
 				}
 			}
-			else if (element instanceof JsonObject) {
-				list.add(JsonUtil.fromJsonObject((JsonObject) element, clazz));
+			else if (_element instanceof JsonObject) {
+				_list.add(JsonUtil.fromJsonObject((JsonObject) _element, __clazz));
 			}
 		}
-		return list;
+		return _list;
+	}
+
+	/**
+	 * From json array.
+	 *
+	 * @param <T> the generic type
+	 * @param __jsonArrayString the json array string
+	 * @param __clazz the clazz
+	 * @return the list
+	 * @throws JsonSyntaxException the json syntax exception
+	 */
+	public static <T> List<T> fromJsonArray(String __jsonArrayString, Class<T> __clazz) throws JsonSyntaxException {
+		JsonParser _parser = new JsonParser();
+		JsonArray _jsonArray = (JsonArray) _parser.parse(__jsonArrayString);
+		return JsonUtil.fromJsonArray(_jsonArray, __clazz);
 	}
 
 	/**
@@ -82,7 +99,7 @@ public final class JsonUtil {
 	 * @param <T> the generic type
 	 * @param jsonObject the json object
 	 * @param clazz the clazz
-	 * @return the t
+	 * @return the instance of T
 	 */
 	public static <T> T fromJsonObject(JsonObject jsonObject, Class<T> clazz) {
 		if (JsonUtil.isJsonObject(clazz)) {
@@ -212,6 +229,21 @@ public final class JsonUtil {
 	}
 
 	/**
+	 * From json object.
+	 *
+	 * @param <T> the generic type
+	 * @param __jsonObjectString the json object string
+	 * @param __clazz the clazz
+	 * @return the instance of T
+	 * @throws JsonSyntaxException the json syntax exception
+	 */
+	public static <T> T fromJsonObject(String __jsonObjectString, Class<T> __clazz) throws JsonSyntaxException {
+		JsonParser _parser = new JsonParser();
+		JsonObject _jsonObject = (JsonObject) _parser.parse(__jsonObjectString);
+		return JsonUtil.fromJsonObject(_jsonObject, __clazz);
+	}
+
+	/**
 	 * Merge json.
 	 *
 	 * @param json the json
@@ -284,7 +316,8 @@ public final class JsonUtil {
 						Object value = field.get(object);
 
 						if (value == null) {
-							jsonObject.addProperty(key.key(), "");
+							// Ignore this field
+							// jsonObject.addProperty(key.key(), "");
 						}
 						else if (value instanceof Boolean) {
 							jsonObject.addProperty(key.key(), (Boolean) value);
@@ -327,7 +360,8 @@ public final class JsonUtil {
 							Object value = method.invoke(object);
 
 							if (value == null) {
-								jsonObject.addProperty(key.key(), "");
+								// Ignore this method
+								// jsonObject.addProperty(key.key(), "");
 							}
 							else if (value instanceof Boolean) {
 								jsonObject.addProperty(key.key(), (Boolean) value);

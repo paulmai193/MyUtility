@@ -97,4 +97,12 @@ public class FixedArrayList<E> extends ArrayList<E> {
 		return super.addAll(__index, __c);
 	}
 
+	/**
+	 * Checks if list is limit.
+	 *
+	 * @return true, if is limit
+	 */
+	public boolean isLimit() {
+		return this.size() == this.limit ? true : false;
+	}
 }
