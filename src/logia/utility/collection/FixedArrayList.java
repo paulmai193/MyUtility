@@ -17,22 +17,17 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = 1L;
 
 	/** The limit. */
-	private int               limit;
-
-	/**
-	 * Instantiates a new fixed array list.
-	 */
-	public FixedArrayList() {
-		super();
-	}
+	private final int         limit;
 
 	/**
 	 * Instantiates a new fixed array list.
 	 *
-	 * @param __c the __c
+	 * @param __c the collection
+	 * @param __initialCapacity the initial capacity
 	 */
-	public FixedArrayList(Collection<? extends E> __c) {
+	public FixedArrayList(Collection<? extends E> __c, int __initialCapacity) {
 		super(__c);
+		this.limit = __initialCapacity;
 	}
 
 	/**
