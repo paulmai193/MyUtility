@@ -39,11 +39,9 @@
 	<properties>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-codec.version>1.10</commons-codec.version>
-		<gson.version>2.3.1</gson.version>
-		<gcm-server.version>1.0.2</gcm-server.version>
-		<apns.version>0.2.3</apns.version>
+		<gson.version>2.6.2</gson.version>
 		<log4j.version>1.2.17</log4j.version>
-		<java-mail.version>1.5.2</java-mail.version>
+		<java-mail.version>1.5.5</java-mail.version>
 	</properties>
 	<dependencies>
 		<dependency>

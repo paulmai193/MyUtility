@@ -93,6 +93,15 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	}
 
 	/**
+	 * Gets the limit.
+	 *
+	 * @return the limit
+	 */
+	public int getLimit() {
+		return this.limit;
+	}
+
+	/**
 	 * Checks if list is limit.
 	 *
 	 * @return true, if is limit
