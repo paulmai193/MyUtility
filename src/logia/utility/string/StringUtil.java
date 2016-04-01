@@ -52,7 +52,8 @@ public class StringUtil {
 		}
 
 		// Caculate each zone
-		int match = Integer.MAX_VALUE;
+		// int match = Integer.MAX_VALUE;
+		int match = 0;
 		int z = 0;
 		if (fstBigger) {
 			for (int n = 0; n < loop; n++) {
@@ -60,7 +61,8 @@ public class StringUtil {
 					// each zone
 					z += Math.abs(first[i + n] - second[i]);
 				}
-				match = match > z ? z : match;
+				// match = match > z ? z : match;
+				match += z;
 				z = 0;
 			}
 		}
@@ -70,7 +72,8 @@ public class StringUtil {
 					// each zone
 					z += Math.abs(first[i] - second[i + n]);
 				}
-				match = match > z ? z : match;
+				// match = match > z ? z : match;
+				match += z;
 				z = 0;
 			}
 		}
