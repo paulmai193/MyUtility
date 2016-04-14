@@ -5,13 +5,15 @@ import java.util.Collection;
 
 import logia.utility.collection.exception.ArrayListLimitException;
 
+import org.apache.commons.collections4.BoundedCollection;
+
 /**
  * The Class FixedArrayList.
  *
  * @author Paul Mai
  * @param <E> the element type
  */
-public class FixedArrayList<E> extends ArrayList<E> {
+public class FixedArrayList<E> extends ArrayList<E> implements BoundedCollection<E> {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
@@ -47,7 +49,7 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	 */
 	@Override
 	public boolean add(E __e) {
-		if (this.size() == this.limit) {
+		if (isFull()) {
 			throw new ArrayListLimitException();
 		}
 		return super.add(__e);
@@ -60,7 +62,7 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	 */
 	@Override
 	public void add(int __index, E __element) {
-		if (this.size() == this.limit) {
+		if (isFull()) {
 			throw new ArrayListLimitException();
 		}
 		super.add(__index, __element);
@@ -73,7 +75,7 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	 */
 	@Override
 	public boolean addAll(Collection<? extends E> __c) {
-		if (this.size() == this.limit) {
+		if (isFull()) {
 			throw new ArrayListLimitException();
 		}
 		return super.addAll(__c);
@@ -86,27 +88,29 @@ public class FixedArrayList<E> extends ArrayList<E> {
 	 */
 	@Override
 	public boolean addAll(int __index, Collection<? extends E> __c) {
-		if (this.size() == this.limit) {
+		if (isFull()) {
 			throw new ArrayListLimitException();
 		}
 		return super.addAll(__index, __c);
 	}
 
-	/**
-	 * Gets the limit.
-	 *
-	 * @return the limit
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.commons.collections4.BoundedCollection#isFull()
 	 */
-	public int getLimit() {
-		return this.limit;
+	@Override
+	public boolean isFull() {
+		return this.size() >= this.limit ? true : false;
 	}
 
-	/**
-	 * Checks if list is limit.
-	 *
-	 * @return true, if is limit
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.commons.collections4.BoundedCollection#maxSize()
 	 */
-	public boolean isLimit() {
-		return this.size() == this.limit ? true : false;
+	@Override
+	public int maxSize() {
+		return this.limit;
 	}
 }
