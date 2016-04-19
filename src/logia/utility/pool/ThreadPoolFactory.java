@@ -43,7 +43,7 @@ public class ThreadPoolFactory {
 		 */
 		@Override
 		public Thread newThread(Runnable r) {
-			Thread t = new Thread(r);
+			Thread t = new Thread(r, "logia-threadpool-exec");
 			t.setPriority(this.priority);
 			return t;
 		}
