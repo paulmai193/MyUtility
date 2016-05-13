@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>logia</groupId>
 	<artifactId>logia-utility</artifactId>
-	<version>0.1.3-SNAPSHOT</version>
+	<version>0.1.3</version>
 
 	<distributionManagement>
 		<repository>
 			<id>nexus</id>
 			<name>Internal repositories</name>
-			<url>http://192.168.1.6:8081/nexus/content/repositories/snapshots/</url>
+			<url>http://192.168.1.6:8081/nexus/content/repositories/releases/</url>
 		</repository>
 	</distributionManagement>
 
@@ -21,11 +21,11 @@
 		</repository>
 		<repository>
 			<id>nexus</id>
-			<url>http://192.168.1.6:8081/nexus/content/repositories/snapshots</url>
-			<snapshots>
+			<url>http://192.168.1.6:8081/nexus/content/repositories/releases</url>
+			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
-			</snapshots>
+			</releases>
 		</repository>
 	</repositories>
 	<build>
