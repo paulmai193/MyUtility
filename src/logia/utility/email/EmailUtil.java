@@ -36,16 +36,16 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EmailUtil {
 
-	private static File      propertyFile = new File("email.properties");
+	private static File			propertyFile	= new File("email.properties");
 
 	/** The password. */
-	protected static String  password;
+	protected static String		password;
 
 	/** The session. */
-	protected static Session session;
+	protected static Session	session;
 
 	/** The username. */
-	protected static String  username;
+	protected static String		username;
 
 	/**
 	 * Sets the properties path.
@@ -87,8 +87,9 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __subject, String __content, List<File> __attachments, Map<RecipientType, String> __recipients)
-	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
+	public void sendEmail(String __subject, String __content, List<File> __attachments,
+	        Map<RecipientType, String> __recipients) throws FileNotFoundException, IOException,
+	        AddressException, MessagingException, URISyntaxException {
 		if (EmailUtil.session == null || EmailUtil.username == null || EmailUtil.password == null) {
 			this.initialized();
 		}
@@ -128,7 +129,8 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __subject, String __content, Map<RecipientType, String> __recipients) throws FileNotFoundException, IOException,
+	public void sendEmail(String __subject, String __content,
+	        Map<RecipientType, String> __recipients) throws FileNotFoundException, IOException,
 	        AddressException, MessagingException, URISyntaxException {
 		if (EmailUtil.session == null || EmailUtil.username == null || EmailUtil.password == null) {
 			this.initialized();
@@ -159,8 +161,9 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __recipients, String __subject, String __content, File __attachment, RecipientType __receipientType)
-	        throws AddressException, FileNotFoundException, IOException, MessagingException, URISyntaxException {
+	public void sendEmail(String __recipients, String __subject, String __content,
+	        File __attachment, RecipientType __receipientType) throws AddressException,
+	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
 		List<File> _attachments = new ArrayList<File>(1);
 		_attachments.add(__attachment);
 		this.sendEmail(__recipients, __subject, __content, _attachments, __receipientType);
@@ -179,8 +182,9 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __subject, String __content, File __attachment, Map<RecipientType, String> __recipients) throws AddressException,
-	        FileNotFoundException, IOException, MessagingException, URISyntaxException {
+	public void sendEmail(String __subject, String __content, File __attachment,
+	        Map<RecipientType, String> __recipients) throws AddressException, FileNotFoundException,
+	        IOException, MessagingException, URISyntaxException {
 		List<File> _attachments = new ArrayList<File>(1);
 		_attachments.add(__attachment);
 		this.sendEmail(__subject, __content, _attachments, __recipients);
@@ -200,8 +204,9 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __recipients, String __subject, String __content, List<File> __attachments, RecipientType __receipientType)
-	        throws FileNotFoundException, IOException, AddressException, MessagingException, URISyntaxException {
+	public void sendEmail(String __recipients, String __subject, String __content,
+	        List<File> __attachments, RecipientType __receipientType) throws FileNotFoundException,
+	        IOException, AddressException, MessagingException, URISyntaxException {
 		Map<RecipientType, String> _mapRecipients = new HashMap<RecipientType, String>(1);
 		_mapRecipients.put(__receipientType, __recipients);
 		this.sendEmail(__subject, __content, __attachments, _mapRecipients);
@@ -220,8 +225,9 @@ public class EmailUtil {
 	 * @throws MessagingException the messaging exception
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	public void sendEmail(String __recipients, String __subject, String __content, RecipientType __recipientType) throws FileNotFoundException,
-	        IOException, AddressException, MessagingException, URISyntaxException {
+	public void sendEmail(String __recipients, String __subject, String __content,
+	        RecipientType __recipientType) throws FileNotFoundException, IOException,
+	        AddressException, MessagingException, URISyntaxException {
 		Map<RecipientType, String> _mapRecipients = new HashMap<RecipientType, String>(1);
 		_mapRecipients.put(__recipientType, __recipients);
 		this.sendEmail(__subject, __content, _mapRecipients);
@@ -234,7 +240,7 @@ public class EmailUtil {
 	 * @param __file the file
 	 * @throws MessagingException the messaging exception
 	 */
-	private void attachFile(Multipart __multipart, File __file) throws MessagingException {
+	protected void attachFile(Multipart __multipart, File __file) throws MessagingException {
 		BodyPart _attachPart = new MimeBodyPart();
 		DataSource _source = new FileDataSource(__file);
 		_attachPart.setDataHandler(new DataHandler(_source));
@@ -249,11 +255,14 @@ public class EmailUtil {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws URISyntaxException the URI syntax exception
 	 */
-	protected final void initialized() throws FileNotFoundException, IOException, URISyntaxException {
+	protected final void initialized()
+	        throws FileNotFoundException, IOException, URISyntaxException {
 		Properties _props = new Properties();
 		_props.load(new FileInputStream(propertyFile));
-		EmailUtil.username = _props.containsKey("email.username") ? _props.getProperty("email.username") : "n/a";
-		EmailUtil.password = _props.containsKey("email.password") ? _props.getProperty("email.password") : "n/a";
+		EmailUtil.username = _props.containsKey("email.username")
+		        ? _props.getProperty("email.username") : "n/a";
+		EmailUtil.password = _props.containsKey("email.password")
+		        ? _props.getProperty("email.password") : "n/a";
 
 		EmailUtil.session = Session.getInstance(_props, new javax.mail.Authenticator() {
 
